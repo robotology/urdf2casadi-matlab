@@ -1,2 +1,2 @@
 # urdf2eom
-Generate equations of motion from URDF file in MATLAB
+Generate symbolic equations of motion from URDF file in MATLAB
