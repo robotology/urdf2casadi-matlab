@@ -11,14 +11,18 @@ model = xml2struct(file);
 
 % NB and gravity
 smds.NB = size(model.robot.joint,2);
-smds.g = [0,0,-9.81];
+%smds.g = [0,0,-9.81];
 
 % Parents
 smds.parent = zeros(1,smds.NB);
-for i = 1:smds.NB
-    for j = 1:smds.NB+1
-        if strcmp(model.robot.joint{i}.parent.Attributes.link,model.robot.link{j}.Attributes.name)
-            smds.parent(i) = j-1;
+if smds.NB == 1
+    smds.parent(1) = 0;
+else
+    for i = 1:smds.NB
+        for j = 1:smds.NB+1
+            if strcmp(model.robot.joint{i}.parent.Attributes.link,model.robot.link{j}.Attributes.name)
+                smds.parent(i) = j-1;
+            end
         end
     end
 end
@@ -26,7 +30,7 @@ end
 % jType
 smds.jtype = {};
 for i = 1:smds.NB
-    if strcmp(model.robot.joint{i}.Attributes.type,'revolute')
+    if strcmp(model.robot.joint{i}.Attributes.type,'revolute')|| strcmp(model.robot.joint{i}.Attributes.type,'continuous')
         if strcmp(model.robot.joint{i}.axis.Attributes.xyz,'1 0 0') ||strcmp(model.robot.joint{i}.axis.Attributes.xyz,'-1 0 0')
             smds.jtype{i} = 'Rx';
         elseif strcmp(model.robot.joint{i}.axis.Attributes.xyz,'0 1 0') ||strcmp(model.robot.joint{i}.axis.Attributes.xyz,'0 -1 0')
@@ -45,5 +49,15 @@ for i = 1:smds.NB
     smds.I(:,:,i) = mcI(sym_m(i),com,sym_I(:,:,i));
 end
 
-
+% Transform tree
+for i = 1:smds.NB    
+    if smds.parent(i) == 0
+        angle = str2num(model.robot.joint{i}.origin.Attributes.rpy);
+        disp = str2num(model.robot.joint{i}.origin.Attributes.xyz);
+    else
+        angle = str2num(model.robot.joint{i}.origin.Attributes.rpy)-str2num(model.robot.joint{i-1}.origin.Attributes.rpy);
+        disp = str2num(model.robot.joint{i}.origin.Attributes.xyz)-str2num(model.robot.joint{i-1}.origin.Attributes.xyz);
+    end
+    smds.Xtree{i} = rotx(angle(1))*roty(angle(2))*rotz(angle(3)) * xlt(disp);
+end
 end

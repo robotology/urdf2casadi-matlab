@@ -1,0 +1,35 @@
+<robot name="test_robot">
+  <link name="base" />
+ 
+  <link name="link1">
+    <inertial>
+      <origin rpy="0 0.5 0" xyz="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <link name="link2">    
+    <inertial>
+      <origin rpy="0 0.5 0" xyz="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <parent link="base"/>
+    <child link="link1"/>
+    <origin xyz="0 1 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="204" lower="-2.96705972839" upper="2.96705972839" velocity="1.91986217719"/>    
+  </joint>
+
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0 1 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="204" lower="-2.96705972839" upper="2.96705972839" velocity="1.91986217719"/>
+  </joint>  
+</robot>

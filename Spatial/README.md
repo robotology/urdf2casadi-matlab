@@ -1,6 +1,6 @@
-Spatial_v2 : Legal Notices
+# Spatial_v2 
 
-This program is Spatial_v2: a package of spatial-vector and
+Legal Notices : This program is Spatial_v2: a package of spatial-vector and
 rigid-body dynamics software. 
 
 Spatial_v2 is Copyright (C) 2012 Roy Featherstone <http://royfeatherstone.org>
