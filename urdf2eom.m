@@ -1,15 +1,15 @@
-function [f,tau] = urdf2eom(file)
+function [tau] = urdf2eom(file)
 %Generates equation of motion in symbolic form from urdf file 
 %Based on ID code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %load urdf and convert to SMDS format
-smds = urdf2smds(file);
+smds = urdf2smds2(file);
 
 % Initialize variables
-q = sym('q',smds.NB);
-qd = sym('qd',smds.NB);
-qdd = sym('qdd',smds.NB);
+q = sym('q',[1,smds.NB]);
+qd = sym('qd',[1,smds.NB]);
+qdd = sym('qdd',[1,smds.NB]);
 syms g;
 
 a_grav = [0;0;0;0;0;g];
