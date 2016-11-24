@@ -4,7 +4,7 @@ function [tau] = urdf2eom(file)
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %load urdf and convert to SMDS format
-smds = urdf2smds2(file);
+smds = urdf2smds(file);
 
 % Initialize variables
 q = sym('q',[1,smds.NB]);
