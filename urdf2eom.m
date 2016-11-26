@@ -7,9 +7,9 @@ function [tau] = urdf2eom(file)
 smds = urdf2smds(file);
 
 % Initialize variables
-q = sym('q',[1,smds.NB]);
-qd = sym('qd',[1,smds.NB]);
-qdd = sym('qdd',[1,smds.NB]);
+q = sym('q',[1,smds.NB],'real');
+qd = sym('qd',[1,smds.NB],'real');
+qdd = sym('qdd',[1,smds.NB],'real');
 syms g;
 
 a_grav = [0;0;0;0;0;g];
@@ -27,7 +27,7 @@ for i = 1:smds.NB
         v{i} = Xup{i}*v{smds.parent(i)} + vJ;
         a{i} = Xup{i}*a{smds.parent(i)} + S{i}*qdd(i) + crm(v{i})*vJ;
     end
-    f{i} = I(:,:,1)*a{i} + crf(v{i})*I(:,:,1)*v{i};
+    f{i} = I(:,:,i)*a{i} + crf(v{i})*I(:,:,i)*v{i};
 end
 
 for i = smds.NB:-1:1
@@ -36,4 +36,5 @@ for i = smds.NB:-1:1
         f{smds.parent(i)} = f{smds.parent(i)} + Xup{i}'*f{i};
     end
 end
+tau = simplify(expand(tau));
 end
