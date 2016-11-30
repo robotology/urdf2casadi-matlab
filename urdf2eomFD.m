@@ -32,6 +32,10 @@ for i = 1:smds.NB
     pA{i} = crf(v{i}) * I(:,:,i) * v{i};
 end
 
+if nargin == 5
+    pA = apply_external_forces( smds.parent, Xup, pA, f_ext );
+end
+
 for i = smds.NB:-1:1
     U{i} = IA{i} * S{i};
     d{i} = S{i}' * U{i};

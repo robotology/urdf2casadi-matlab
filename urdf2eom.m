@@ -6,7 +6,7 @@ function [eq] = urdf2eom(file)
 choice = input('Enter 1 for FD eq. and 2 for ID eq. -> ');
 if choice == 1
     eq = urdf2eomFD(file);
-else
+elseif choice == 2
     eq = urdf2eomID(file);
 end
 end
