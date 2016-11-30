@@ -18,8 +18,8 @@ end
 %Initilizations
 smds.parent = zeros(1,smds.NB);
 smds.jtype = {};
-sym_I = sym('I%d',[3,3,smds.NB]);
-sym_m = sym('m',[1,smds.NB]);
+sym_I = sym('I%d',[3,3,smds.NB],'real');
+sym_m = sym('m',[1,smds.NB],'real');
 
 %Generation loop
 for i = 1:smds.NB
