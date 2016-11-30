@@ -1,6 +1,6 @@
 function [qdd] = urdf2eomFD(file)
 %Generates equation of motion in symbolic form from urdf file
-%Based on forward dynamics code by Roy Featherstone, 2015
+%Based on articulated body forward dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %Load urdf and convert to SMDS format
@@ -55,7 +55,7 @@ for i = 1:smds.NB
 end
 
 %Uncomment below line to simplify the equations. Can take very long.
-% qdd = simplify(expand(qdd));
+qdd = simplify(expand(qdd));
 
 %Write to file
 file = fopen('qdd.txt', 'w');

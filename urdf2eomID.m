@@ -1,6 +1,6 @@
 function [tau] = urdf2eomID(file)
 %Generates equation of motion in symbolic form from urdf file 
-%Based on inverse dynamics code by Roy Featherstone, 2015
+%Based on RNEA inverse dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %Load urdf and convert to SMDS format

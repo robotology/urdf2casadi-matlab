@@ -1,0 +1,4 @@
+I33_1*qdd1 + I33_2*qdd1 + I33_2*qdd2 + (m1*qdd1)/625 + (401*m2*qdd1)/10000 + (m2*qdd2)/10000 + (m2*qdd1*cos(q2))/250 + (m2*qdd2*cos(q2))/500 - (m2*qd2^2*sin(q2))/500 - (m2*qd1*qd2*sin(q2))/250
+
+I33_2*qdd1 + I33_2*qdd2 + (m2*qdd1)/10000 + (m2*qdd2)/10000 + (m2*qdd1*cos(q2))/500 + (m2*qd1^2*sin(q2))/500
+
