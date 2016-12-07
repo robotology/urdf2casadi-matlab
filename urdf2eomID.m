@@ -41,7 +41,7 @@ for i = smds.NB:-1:1
 end
 
 %Uncomment below line to simplify the equations. Can take very long.
-tau = simplify(expand(tau));
+%tau = simplify(expand(tau));
 
 %Write to file
 file = fopen('tau.txt', 'w');

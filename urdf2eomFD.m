@@ -55,7 +55,7 @@ for i = 1:smds.NB
 end
 
 %Uncomment below line to simplify the equations. Can take very long.
-qdd = simplify(expand(qdd));
+%qdd = simplify(expand(qdd));
 
 %Write to file
 file = fopen('qdd.txt', 'w');
