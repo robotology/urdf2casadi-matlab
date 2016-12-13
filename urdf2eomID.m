@@ -1,4 +1,4 @@
-function [tau] = urdf2eomID(file)
+function [tau] = urdf2eomID(file,simplifyflag)
 %Generates equation of motion in symbolic form from urdf file 
 %Based on RNEA inverse dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
@@ -40,8 +40,9 @@ for i = smds.NB:-1:1
     end
 end
 
-%Uncomment below line to simplify the equations. Can take very long.
-%tau = simplify(expand(tau));
+if simplifyflag == 1
+    tau = simplify(expand(tau));
+end
 
 %Write to file
 file = fopen('tau.txt', 'w');

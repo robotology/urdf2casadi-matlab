@@ -8,6 +8,6 @@ Required tags in URDF file (for each joint or link) -
 [2] Link origin 
 [3] Joint origin
 
-How to use - Call urdf2eom with the URDF file as the argument. The URDF file can be placed in the URDFs folder.  
+How to use - Call urdf2eom with the URDF file as the argument. The URDF file can be placed in the URDFs folder. The equations (tau for ID and qdd for FD) are written to text file. 
 
 Code by Deepak Paramkusam, TU Delft. Based on Roy Featherstone's Rigid Body Dynamics Algorithms.
