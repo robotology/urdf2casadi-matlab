@@ -18,8 +18,23 @@ end
 %Initilizations
 smds.parent = zeros(1,smds.NB);
 smds.jtype = {};
-sym_I = sym('I%d',[3,3,smds.NB],'real');
-sym_m = sym('m',[1,smds.NB],'real');
+% sym_I = sym('I%d',[3,3,smds.NB],'real');
+% sym_m = sym('m',[1,smds.NB],'real');
+
+import casadi.*;
+% Extract inertia info from urdf or use symbolic values also for the
+% inertia parameters
+use_urdf_inertia_param = true;
+
+if ~use_urdf_inertia_param
+    sym_I = SX.sym('I%d',3,3,smds.NB);
+    sym_m = SX.sym('m',1,smds.NB);
+    smds.I = SX.sym('I%d',6,6,smds.NB);
+else
+    I = zeros(3,3,smds.NB+1);
+    m = zeros(smds.NB+1,1);
+    smds.I = zeros(6,6,smds.NB);
+end
 
 %Generation loop
 for i = 1:smds.NB
@@ -43,8 +58,22 @@ for i = 1:smds.NB
     
     %Inertia
     com = str2num(model.robot.link{i+1}.inertial.origin.Attributes.xyz);
-    smds.I(:,:,i) = mcI(sym_m(i),com,sym_I(:,:,i));
-    
+
+    if ~use_urdf_inertia_param
+        smds.I{1,i} = mcI(sym_m(i),com,sym_I{1,i});
+    else
+        m(i)      = str2num(model.robot.link{i+1}.inertial.mass.Attributes.value);
+        I(1,1,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.ixx);
+        I(1,2,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.ixy);
+        I(1,3,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.ixz);
+        I(2,1,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.ixy);
+        I(2,2,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.iyy);
+        I(2,3,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.iyz);
+        I(3,1,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.ixz);
+        I(3,2,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.iyz);
+        I(3,3,i) = str2num(model.robot.link{i+1}.inertial.inertia.Attributes.izz);
+        smds.I(:,:,i) = mcI(m(i),com,I(:,:,i));
+    end
     %Transform tree
     if smds.parent(i) == 0
         angle = str2num(model.robot.joint{i}.origin.Attributes.rpy);
@@ -55,4 +84,5 @@ for i = 1:smds.NB
     end
     smds.Xtree{i} = rotx(angle(1))*roty(angle(2))*rotz(angle(3)) * xlt(disp);
 end
+    smds.use_urdf_inertia_param = use_urdf_inertia_param;
 end

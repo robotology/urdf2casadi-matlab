@@ -1,16 +1,21 @@
-function [qdd] = urdf2eomFD(file,simplifyflag)
+function [f] = urdf2eomFD(file,geneate_c_code)
 %Generates equation of motion in symbolic form from urdf file
 %Based on articulated body forward dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %Load urdf and convert to SMDS format
 smds = urdf2smds(file);
-
+import casadi.*;
 %Initialize variables
-q = sym('q',[1,smds.NB],'real')';
-qd = sym('qd',[1,smds.NB],'real')';
-tau = sym('tau',[1,smds.NB],'real')';
-syms g;
+q = SX.sym('q',[1,smds.NB])';
+qd = SX.sym('qd',[1,smds.NB])';
+qdd = SX.sym('qdd', [smds.NB,1]);
+tau = SX.sym('tau',[1,smds.NB])';
+g = SX.sym('g');
+% q = sym('q',[1,smds.NB],'real')';
+% qd = sym('qd',[1,smds.NB],'real')';
+% tau = sym('tau',[1,smds.NB],'real')';
+% syms g;
 
 %Gravity
 a_grav = [0;0;0;0;0;g];
@@ -28,8 +33,14 @@ for i = 1:smds.NB
         v{i} = Xup{i}*v{smds.parent(i)} + vJ;
         c{i} = crm(v{i}) * vJ;
     end
-    IA{i} = I(:,:,i);
-    pA{i} = crf(v{i}) * I(:,:,i) * v{i};
+    if smds.use_urdf_inertia_param
+        IA{i} = I(:,:,i);
+        pA{i} = crf(v{i}) * I(:,:,i) * v{i};
+    else
+        IA{i} = I{1,i};
+        pA{i} = crf(v{i}) * I{1,i} * v{i};
+    end
+
 end
 
 for i = smds.NB:-1:1
@@ -54,14 +65,28 @@ for i = 1:smds.NB
     a{i} = a{i} + S{i}*qdd(i);
 end
 
-if simplifyflag == 1
-    qdd = simplify(expand(qdd));
-end
-
 %Write to file
-file = fopen('qdd.txt', 'w');
-for i = 1:smds.NB
-    fprintf(file, '%s\r\n\n', char(qdd(i)));
-end
-fclose(file);
+% file = fopen('qdd.txt', 'w');
+% for i = 1:smds.NB
+%     fprintf(file, '%s\r\n\n', char(qdd(i)));
+% end
+% fclose(file);
+% end
+
+f=Function('forwardDynamics',{q,qd,tau},{qdd},{'q','qd','tau'},{'qdd'});
+
+%% Code generation option
+if geneate_c_code
+    opts = struct('main', true,...
+                  'mex', true);
+    f.generate('forwardDynamics.c',opts);
+    mex forwardDynamics.c -DMATLAB_MEX_FILE
+
+    % Test the function
+    q = zeros(6,1);
+    qd = zeros(6,1);
+    tau = zeros(6,1);
+    t=forwardDynamics('forwardDynamics',q,qd,tau);
+    T=full(t);
+    disp(T);
 end

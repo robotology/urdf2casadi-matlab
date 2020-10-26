@@ -4,17 +4,17 @@ function [eq] = urdf2eom(file)
 %http://royfeatherstone.org/spatial/v2/index.html
 
 choice = input('Enter 1 for FD eq. and 2 for ID eq. -> ');
-flag = input('Try to simplify final equation? Can take very long depending on number of links. (y/n)','s');
+flag = input('Try to geneate and compile c code? (y/n)','s');
 
 if strcmp(flag,'y')
-    simplifyflag = 1;
+    geneate_c_code = 1;
 else
-    simplifyflag = 0;
+    geneate_c_code = 0;
 end
 
 if choice == 1
-    eq = urdf2eomFD(file,simplifyflag);
+    eq = urdf2eomFD(file,geneate_c_code);
 elseif choice == 2
-    eq = urdf2eomID(file,simplifyflag);
+    eq = urdf2eomID(file,geneate_c_code);
 end
 end
