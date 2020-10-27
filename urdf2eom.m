@@ -3,6 +3,9 @@ function [eq] = urdf2eom(file)
 %Based on Rigid Body Dynamics Algorithms by Roy Featherstone
 %http://royfeatherstone.org/spatial/v2/index.html
 
+%% Add casadi to Matlab path
+addpath('/home/iiticublap041/casadi-linux-matlabR2014b-v3.5.3');
+
 choice = input('Enter 1 for FD eq. and 2 for ID eq. -> ');
 flag = input('Try to geneate and compile c code? (y/n)','s');
 
