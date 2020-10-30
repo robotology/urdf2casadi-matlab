@@ -51,13 +51,15 @@ end
 
 % Define the symbolic function and set its input and output in poper order
 % and with proper names
-inputVarNames = {'q','qd','qdd','g'};
+% Require the linkExternlWrenches to be supplied as a single matrix of size
+% [6,NB]
+F_ext = SX.sym('f_ext', 6,smds.NB);
 for ii = 1:smds.NB
-    extForceLink = strcat('externalForceOnLink_',num2str(ii));
-    inputVarNames = [inputVarNames, extForceLink];
+    F_ext(:,ii)= f_ext{ii};
 end
+inputVarNames = {'q','qd','qdd','g','F_ext'};
 outputVarName = 'jointToques';
-symbolicIDFunction=Function('rnea',[{q,qd,qdd,g},f_ext],{tau},inputVarNames,outputVarName);
+symbolicIDFunction=Function('rnea',{q,qd,qdd,g,F_ext},{tau},inputVarNames,outputVarName);
 % inputVarNames = {'q','qd','qdd','g'};
 % outputVarName = 'jointToques';
 % symbolicIDFunction=Function('rnea',[{q,qd,qdd,g}],{tau},inputVarNames,outputVarName);

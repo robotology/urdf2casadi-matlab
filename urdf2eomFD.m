@@ -4,7 +4,7 @@ function [forwardDynamicsFunction] = urdf2eomFD(file,geneate_c_code)
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %Load urdf and convert to SMDS format
-smds = urdf2smds(file);
+smds = my_urdf2smds(file);
 import casadi.*;
 %Initialize variables
 q = SX.sym('q',[1,smds.NB])';
@@ -19,7 +19,7 @@ a_grav = [0;0;0;g(1);g(2);g(3)];
 
 %Articulated body algorithm
 for i = 1:smds.NB
-    [ XJ, S{i} ] = jcalc( smds.jtype{i}, q(i) );
+    [ XJ, S{i} ] = jcalc( smds.jaxis{i},smds.jtype{i}, q(i) );
     vJ = S{i}*qd(i);
     Xup{i} = XJ * smds.Xtree{i};
     if smds.parent(i) == 0
@@ -58,16 +58,10 @@ for i = 1:smds.NB
 end
 
 % Define the symbolic function and set its input and output in poper order
-if smds.use_urdf_inertia_param
-    forwardDynamicsFunction = Function('forwardDynamics',{q,qd,g,tau},{qdd},{'joints_position','joints_velocity','gravity','joints_torque'},{'joints_acceleration'});
-else
-    %% WIP
-    for ii = 1:smds.NB
-        inertia_param_names{ii} = strcat('spatial_inertia_link_',num2str(ii)); 
-    end
-    var_names = [{'joints_position','joints_velocity','gravity','joints_torque'},inertia_param_names];
-    forwardDynamicsFunction = Function('forwardDynamics',[{q,qd,g,tau},smds.I],{qdd},var_names,{'joints_acceleration'});
-end
+
+forwardDynamicsFunction = Function('forwardDynamics',{q,qd,g,tau},{qdd},{'joints_position','joints_velocity','gravity','joints_torque'},{'joints_acceleration'});
+
+  
 %% Code generation option
 if geneate_c_code
     opts = struct('main', true,...
@@ -76,26 +70,9 @@ if geneate_c_code
     mex forwardDynamics.c -DMATLAB_MEX_FILE
 
     % Test the function
-    if smds.use_urdf_inertia_param
-        q = zeros(6,1);
-        qd = zeros(6,1);
-        g = 0;
-        tau = zeros(6,1);
-        t=forwardDynamics('forwardDynamics',q,qd,g,tau);
-        disp('Joint acceleration for all null inputs:')
-        T=full(t);
-        disp(T);
-    else
-        %% WIP
-        q = zeros(6,1);
-        qd = zeros(6,1);
-        g = 0;
-        tau = zeros(6,1);
-        test_I = SX.sym('I',6,6,smds.NB);
-        test_I{1,:} = {};
-        t=forwardDynamics('forwardDynamics',q,qd,g,tau);
-        disp('Joint acceleration for all null inputs:')
-        T=full(t);
-        disp(T);
+    a=forwardDynamics('forwardDynamics');
+    A=full(a);       
+    if (A~=zeros(smds.NB,1))
+        error('The compiled smds returns non null torques for all null inputs (gravity included)');
     end
 end

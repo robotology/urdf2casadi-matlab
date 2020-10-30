@@ -12,7 +12,6 @@ nrOfLinks = nrOfJoints + 1;
 
 baseAcc_idyn = iDynTree.Vector6();
 baseAcc_idyn.zero();
-gravityAccelerationModulus = 9.80665;
 linkExtForces = iDynTree.LinkWrenches(kinDynComp.model());
 linkExtForces.zero();
 output_FreeFloatingGeneralizedTorques = iDynTree.FreeFloatingGeneralizedTorques(kinDynComp.model());
@@ -54,15 +53,13 @@ g =[0;0;-gravityAccelerationModulus]; % Gravity column vector
 tau_symbolic_compiled = rnea('rnea',jointPos, jointVel, jointAcc, g);
 % Test with symbolic function
 % If we do not supply the external forces they are NOT automatically considered null in the symbolic function
-extForce = zeros(6,1);
-if nrOfJoints ==6
-    tau_symbolic_function = symbolicDynamicFunction(jointPos, jointVel, jointAcc, g,0,0,0,0,0,0);
-elseif nrOfJoints ==1
-    tau_symbolic_function = symbolicDynamicFunction(jointPos, jointVel, jointAcc, g,0);
-end
+extForce = zeros(6,nrOfJoints);
+
+tau_symbolic_function = symbolicDynamicFunction(jointPos, jointVel, jointAcc, g,extForce);
+
 tau_symbolic_function = full(tau_symbolic_function);
-%% Check results
-plot(abs(tau_iDynTree-tau_symbolic_function));
+% %% Check results
+% plot(abs(tau_iDynTree-tau_symbolic_function));
 disp('IDyntree:')
 disp(tau_iDynTree)
 disp('Symbolic:')
