@@ -40,7 +40,11 @@ for i = 1:smds.NB
     % to the frame representing the relative position of the frame of joint i wrt the frame of parent(i)
     smds.Xtree{i} = computeBodyJointTransforms(model,i);    
     %% Compute inertia
-    smds.I{1,i} = computeInertiaWrtCenterOfMass(model, i);
+    [I,m,com,rpy] = computeInertiaWrtCenterOfMass(model, i);
+    smds.I{1,i} = I;
+    smds.mass{1,i} = m;
+    smds.com{1,i} = com.';
+    smds.rpy{1,i} = rpy.';
 end
 %% Accorporate bodies connected by `fixed`  joints 
 % Find indeces of fixed joints
