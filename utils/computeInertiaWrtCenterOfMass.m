@@ -1,4 +1,4 @@
-function I_oL = computeInertiaWrtCenterOfMass(model, jointIndex)
+function [I_oL, m, com ,rpy] = computeInertiaWrtCenterOfMass(model, jointIndex)
 %Compute the inertia of body i wrt a frame centered in the center of mass.
 % Seethe inertial tag for a link in a urdf:
 % http://wiki.ros.org/urdf/XML/link
