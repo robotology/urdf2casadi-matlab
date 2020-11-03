@@ -22,7 +22,7 @@ g = SX.sym('g',[3,1]);
 for l = 1:smds.NB
     % Velocity and acceleration must be expressed in the same frame as the
     % inertia and the center of mass: the body i local frame
-    A{l} = computeLinkRegressor((X1{l}*Xup{1})*v{l}, (X1{l}*Xup{1})*a{l});
+    A{l} = computeLinkRegressor( v{l}, a{l}, g);
 end
 % Compute the matrix Y (for a serial kinematic chain) as the upper triangular represenation of formula
 % (6.46) in Springer Handbook of Robotics(2016), Chapter 6.3. 

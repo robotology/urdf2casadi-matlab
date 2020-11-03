@@ -32,7 +32,7 @@ for i = 1:nrOfJoints
                            smds.I{i}(2,2); smds.I{i}(2,3); smds.I{i}(3,3)]; 
 end
 inertiaParameters = reshape(p,[],1);
-Y = inverseDynamicsInertialParametersRegressor(robotModelURDF,1);
+Y = inverseDynamicsInertialParametersRegressor(robotModelURDF,firstTime);
 tau_regressor = Y(jointPos, jointVel, jointAcc, g)*inertiaParameters;
 tau_regressor = full(tau_regressor);
 end

@@ -1,7 +1,8 @@
 function [X1,S,Xup, v, a] = computeKinematics (smds, q, qd, qdd, g)
 %Compute forward kinematics transformations, link velocities and accelerations
 % Specificcaly compute:
-%  *links spatial velocities, acceleations and motion coordinate transform
+%  *link i spatial velocity(the left trivialized velocity in Traversaro's notation), acceleation in LOCAL body i coordinates
+%  *motion coordinate transform
 %   between each link i and its parent lambda(i) (i_X_(lambda(i))=
 %   X_up{i});
 %  *spatial motion transform from link 1 to link i X1{i}. Notice that the
