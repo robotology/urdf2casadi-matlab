@@ -14,7 +14,7 @@ qdd = SX.sym('qdd',[smds.NB,1]);
 g = SX.sym('g',[3,1]);
 
 % Compute frame transformations, joint motion subspace matrix, link velocity and accelerations
-[X1, S, Xup, v, a] = computeKinematics(smds, q, qd, qdd, g);
+[X,XForce,S,Xup, v, a] = computeKinematics(smds, q, qd, qdd, g);
 
 % Compute for each link i the matrix A_j for all links j distal to link
 % i. This matix arises from recasting the spatial Newton-Euler dynamic equation 
@@ -34,19 +34,18 @@ for i =1:smds.NB
     degreeOfFreedomJoint(i) = size(S{i},2);
 end
 totalDegreeOfFreedom = sum(degreeOfFreedomJoint);
-numInertiaParameters = 10;
-Y = SX.sym('Y',Sparsity(totalDegreeOfFreedom,numInertiaParameters*smds.NB));
+numInertiaParametersPerLink = 10;
+Y = SX.sym('Y',Sparsity(totalDegreeOfFreedom,numInertiaParametersPerLink*smds.NB));
 
 % TODO: find a faster and cleaner way to construct the matrix 
-currentJoint = 0;
-linkOffSet = 0;
-for i= 1:smds.NB
-    for j = 1:(smds.NB-i+1)
-        columnOffset = currentJoint + numInertiaParameters*(j-1);
-        Y(linkOffSet+1:linkOffSet+degreeOfFreedomJoint(i),columnOffset+1:columnOffset+numInertiaParameters) = (S{i}.')*(X1{i}.')*A{i};
+jointOffset = 0;
+for rowIndex= 1:smds.NB
+    columnOffset = numInertiaParametersPerLink*(rowIndex-1);
+    for columnIndex = rowIndex:smds.NB
+        Y(jointOffset+1:jointOffset+degreeOfFreedomJoint(rowIndex),columnOffset+1:columnOffset+numInertiaParametersPerLink) = (S{columnIndex}.')*(XForce{columnIndex}{1,rowIndex})*A{columnIndex};
+        columnOffset = columnOffset + numInertiaParametersPerLink;
     end
-    linkOffSet = linkOffSet + degreeOfFreedomJoint(i);
-    currentJoint = currentJoint + numInertiaParameters;
+    jointOffset = jointOffset + degreeOfFreedomJoint(rowIndex);
 end
 
 %% Define the symbolic function and set its input and output in poper order
