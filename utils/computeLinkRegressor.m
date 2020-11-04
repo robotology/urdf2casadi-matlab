@@ -1,4 +1,4 @@
-function A = computeLinkRegressor(linkSpatialVel, linkSpatialAcc, gravity)
+function A = computeLinkRegressor(linkSpatialVel, linkSpatialAcc)
 
 % Link angular vel
 linkAngularVel = linkSpatialVel(1:3);
@@ -16,6 +16,6 @@ L_omegaDot = computeRotationalMomentumRegressor(linkAngularVelDot);
 % Compute the classical acceleration of the origin of body i frame(d_oi)
 d_oi_DDot = linkLinearVelDot + skew(linkAngularVel)*linkLinearVel;
 
-A = [zeros(3,1),-skew(d_oi_DDot+gravity),                    L_omegaDot+skew(linkAngularVel)*L_omega;
-     d_oi_DDot+gravity, skew(linkAngularVelDot)+skew(linkAngularVel)*skew(linkAngularVel), zeros(3,6)];
+A = [zeros(3,1),-skew(d_oi_DDot),                    L_omegaDot+skew(linkAngularVel)*L_omega;
+     d_oi_DDot, skew(linkAngularVelDot)+skew(linkAngularVel)*skew(linkAngularVel), zeros(3,6)];
 end

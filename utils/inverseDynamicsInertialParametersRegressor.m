@@ -22,7 +22,7 @@ g = SX.sym('g',[3,1]);
 for l = 1:smds.NB
     % Velocity and acceleration must be expressed in the same frame as the
     % inertia and the center of mass: the body i local frame
-    A{l} = computeLinkRegressor( v{l}, a{l}, g);
+    A{l} = computeLinkRegressor( v{l}, a{l});
 end
 % Compute the matrix Y (for a serial kinematic chain) as the upper triangular represenation of formula
 % (6.46) in Springer Handbook of Robotics(2016), Chapter 6.3. 
@@ -37,12 +37,11 @@ totalDegreeOfFreedom = sum(degreeOfFreedomJoint);
 numInertiaParametersPerLink = 10;
 Y = SX.sym('Y',Sparsity(totalDegreeOfFreedom,numInertiaParametersPerLink*smds.NB));
 
-% TODO: find a faster and cleaner way to construct the matrix 
 jointOffset = 0;
 for rowIndex= 1:smds.NB
     columnOffset = numInertiaParametersPerLink*(rowIndex-1);
     for columnIndex = rowIndex:smds.NB
-        Y(jointOffset+1:jointOffset+degreeOfFreedomJoint(rowIndex),columnOffset+1:columnOffset+numInertiaParametersPerLink) = (S{columnIndex}.')*(XForce{columnIndex}{1,rowIndex})*A{columnIndex};
+        Y(jointOffset+1:jointOffset+degreeOfFreedomJoint(rowIndex),columnOffset+1:columnOffset+numInertiaParametersPerLink) = (S{rowIndex}.')*(XForce{columnIndex}{1,rowIndex})*A{columnIndex};
         columnOffset = columnOffset + numInertiaParametersPerLink;
     end
     jointOffset = jointOffset + degreeOfFreedomJoint(rowIndex);
