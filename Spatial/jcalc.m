@@ -1,4 +1,4 @@
-function  [Xj,S] = jcalc( jtyp, q )
+function  [Xj,S] = jcalc(jointAxis, jtyp, q )
 
 % jcalc  joint transform and motion subspace matrices.
 % [Xj,S]=jcalc(type,q)  returns the joint transform and motion subspace
@@ -17,15 +17,18 @@ else
 end
 
 switch code
+  case 'fixed'				% actually for fixed joint S is 0 x 6 vector(see Featherstone)
+    Xj = eye(6);
+    S = [0;0;0;0;0;0];
   case 'Rx'				% revolute X axis
     Xj = rotx(q);
-    S = [1;0;0;0;0;0];
+    S = [jointAxis(1);jointAxis(2);jointAxis(3);0;0;0];
   case 'Ry'				% revolute Y axis
     Xj = roty(q);
-    S = [0;1;0;0;0;0];
+    S = [jointAxis(1);jointAxis(2);jointAxis(3);0;0;0];
   case {'R','Rz'}			% revolute Z axis
     Xj = rotz(q);
-    S = [0;0;1;0;0;0];
+    S = [jointAxis(1);jointAxis(2);jointAxis(3);0;0;0];
   case 'Px'				% prismatic X axis
     Xj = xlt([q 0 0]);
     S = [0;0;0;1;0;0];

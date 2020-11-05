@@ -1,24 +1,25 @@
-function [qdd] = urdf2eomFD(file,simplifyflag)
+function [forwardDynamicsFunction] = urdf2eomFD(file,geneate_c_code)
 %Generates equation of motion in symbolic form from urdf file
 %Based on articulated body forward dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %Load urdf and convert to SMDS format
-smds = urdf2smds(file);
-
+smds = my_urdf2smds(file);
+import casadi.*;
 %Initialize variables
-q = sym('q',[1,smds.NB],'real')';
-qd = sym('qd',[1,smds.NB],'real')';
-tau = sym('tau',[1,smds.NB],'real')';
-syms g;
+q = SX.sym('q',[1,smds.NB])';
+qd = SX.sym('qd',[1,smds.NB])';
+qdd = SX.sym('qdd', [smds.NB,1]);
+tau = SX.sym('tau',[1,smds.NB])';
+g = SX.sym('g',[3,1]);
 
 %Gravity
-a_grav = [0;0;0;0;0;g];
-I = smds.I;
+a_grav = [0;0;0;g(1);g(2);g(3)];
+
 
 %Articulated body algorithm
 for i = 1:smds.NB
-    [ XJ, S{i} ] = jcalc( smds.jtype{i}, q(i) );
+    [ XJ, S{i} ] = jcalc( smds.jaxis{i},smds.jtype{i}, q(i) );
     vJ = S{i}*qd(i);
     Xup{i} = XJ * smds.Xtree{i};
     if smds.parent(i) == 0
@@ -28,8 +29,10 @@ for i = 1:smds.NB
         v{i} = Xup{i}*v{smds.parent(i)} + vJ;
         c{i} = crm(v{i}) * vJ;
     end
-    IA{i} = I(:,:,i);
-    pA{i} = crf(v{i}) * I(:,:,i) * v{i};
+
+    IA{i} = smds.I{1,i};
+    pA{i} = crf(v{i}) * smds.I{1,i} * v{i};
+
 end
 
 for i = smds.NB:-1:1
@@ -54,14 +57,22 @@ for i = 1:smds.NB
     a{i} = a{i} + S{i}*qdd(i);
 end
 
-if simplifyflag == 1
-    qdd = simplify(expand(qdd));
-end
+% Define the symbolic function and set its input and output in poper order
 
-%Write to file
-file = fopen('qdd.txt', 'w');
-for i = 1:smds.NB
-    fprintf(file, '%s\r\n\n', char(qdd(i)));
-end
-fclose(file);
+forwardDynamicsFunction = Function('forwardDynamics',{q,qd,g,tau},{qdd},{'joints_position','joints_velocity','gravity','joints_torque'},{'joints_acceleration'});
+
+  
+%% Code generation option
+if geneate_c_code
+    opts = struct('main', true,...
+                  'mex', true);
+    forwardDynamicsFunction.generate('forwardDynamics.c',opts);
+    mex forwardDynamics.c -DMATLAB_MEX_FILE
+
+    % Test the function
+    a=forwardDynamics('forwardDynamics');
+    A=full(a);       
+    if (A~=zeros(smds.NB,1))
+        error('The compiled smds returns non null torques for all null inputs (gravity included)');
+    end
 end
