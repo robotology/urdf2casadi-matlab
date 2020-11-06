@@ -1,13 +1,20 @@
-# urdf2eom
-Generates symbolic equations of motion from URDF file in MATLAB.
+# urdf2casadi-matlab
+The main porpuse of this project is to generate symbolic represantions of the kinematics and dynamics of a robot
+by extracting its geometrical and physical paramters from its [URDF](http://wiki.ros.org/urdf) description.
+It uses [CasADi](https://web.casadi.org/) to compute the symbolic expressions. It is inspired by 
+[urdf2eom](https://github.com/DeepakParamkusam/urdf2eom). 
 
-Forward dynamics (using articulated-body algorithm) and inverse dynamics (using recursive Newton-Euler algorithm) supported. Currently supports revolute/continuous joints and fixed-base robots only.
+## Installation
+The software has the following dependencies:
+* [MATLAB](https://www.mathworks.com/products/matlab.html);
+* [CasADi](https://web.casadi.org/): [Here](https://web.casadi.org/get/) you can find the instruction to install it.
 
-Required tags in URDF file (for each joint or link) - 
-[1] Joint axis (along X, Y or Z) 
-[2] Link origin 
-[3] Joint origin
+## Additional fetures
+[IDynTree](https://github.com/robotology/idyntree) has been used to validate the results of the symbolic models.
+Its documentation can be found at https://robotology.github.io/idyntree/master/.
+Make sure to compile the [bindings to MATLAB](https://github.com/robotology/idyntree#bindings).
+Some usefull turorial can be found at https://github.com/robotology/idyntree#tutorials .
 
-How to use - Call urdf2eom with the URDF file as the argument. The URDF file can be placed in the URDFs folder. The equations (tau for ID and qdd for FD) are written to text file. 
-
-Code by Deepak Paramkusam, TU Delft. Based on Roy Featherstone's Rigid Body Dynamics Algorithms.
+## Usage 
+Get the [URDF](http://wiki.ros.org/urdf) of your robot. Then pick one of the functions to create and test the model against IDynTree 
+in the Verification/ subfolder. 

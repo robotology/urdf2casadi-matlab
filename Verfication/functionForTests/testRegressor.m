@@ -17,3 +17,5 @@ g = [0;0;-gravityModulus];
 Y_symb = Y(jointPos,jointVel,jointAcc,g);
 
 Y_IDyn = computeRegressorIdynTree(robotURDFModel,jointPos,jointVel,jointAcc,gravityModulus);
+
+e = abs(Y_IDyn(:,11:end)-full(Y_symb));
