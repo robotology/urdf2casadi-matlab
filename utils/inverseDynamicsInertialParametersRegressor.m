@@ -5,7 +5,7 @@ function symbolicRegressorFunction = inverseDynamicsInertialParametersRegressor(
 % on the computations
 
 %Load urdf and convert to SMDS format
-smds = my_urdf2smds(robotURDFModel);
+smds = extractSystemModel(robotURDFModel);
 %Initialize variables
 import casadi.*;
 q = SX.sym('q',[smds.NB,1]);

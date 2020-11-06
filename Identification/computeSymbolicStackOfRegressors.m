@@ -1,6 +1,6 @@
 function stackOfRegressors = computeSymbolicStackOfRegressors(robotURDFModel,nrOfTrajectoryPoints)
 %Load urdf and convert to SMDS format
-smds = my_urdf2smds(robotURDFModel);
+smds = extractSystemModel(robotURDFModel);
 %Initialize variables
 import casadi.*;
 q = SX.sym('q',[nrOfTrajectoryPoints,smds.NB]);

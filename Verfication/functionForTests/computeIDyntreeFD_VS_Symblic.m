@@ -14,7 +14,7 @@ if isempty(firstTime)
 else
     firstTime = 0;
 end
-symbolicDynamicFunction = urdf2eomFD(robotModelURDF,firstTime);
+symbolicDynamicFunction = symbolicForwardDynamics(robotModelURDF,firstTime);
 g =[0;0;-gravityModulus]; % Gravity column vector
 % Test with symbolic function
 jointAccSymbolic = symbolicDynamicFunction(q, qd, g,tau);

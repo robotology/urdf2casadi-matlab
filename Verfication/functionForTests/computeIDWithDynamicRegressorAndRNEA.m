@@ -9,7 +9,7 @@ if isempty(firstTime)
 else
     firstTime = 0;
 end
-symbolicIDFunction = urdf2eomID(robotModelURDF,firstTime);
+symbolicIDFunction = symbolicInverseDynamics(robotModelURDF,firstTime);
  % Gravity column vector
 g =[0;0;-gravityModulus];
 % The external forces is a vector of (6,1). It has to be one per
@@ -26,7 +26,7 @@ tau_RNEA = full(tau_RNEA);
 %% Use regressor
 % Compute the Inertia parameters in body frame
 %Load urdf and convert to SMDS format
-smds = my_urdf2smds(robotModelURDF);
+smds = extractSystemModel(robotModelURDF);
 for i = 1:nrOfJoints
     p(:,i) = [smds.mass{i}; smds.mass{i}*smds.com{i}; smds.I{i}(1,1); smds.I{i}(1,2); smds.I{i}(1,3);...
                            smds.I{i}(2,2); smds.I{i}(2,3); smds.I{i}(3,3)]; 

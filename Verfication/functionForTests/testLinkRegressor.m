@@ -1,7 +1,7 @@
 kuka_kr210 = '/home/iiticublap041/baljinder/urdf2eom/URDFs/kuka_kr210.urdf';
 robotModelURDF= kuka_kr210;
 %Load urdf and convert to SMDS format
-smds = my_urdf2smds(robotModelURDF);
+smds = extractSystemModel(robotModelURDF);
 jointPos = [pi/6 0 0 0 0 0]';
 jointVel = rand(6,1);
 jointAcc = rand(6,1);

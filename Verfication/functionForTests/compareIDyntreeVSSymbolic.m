@@ -44,7 +44,7 @@ if isempty(firstTime)
 else
     firstTime = 0;
 end
-symbolicDynamicFunction = urdf2eomID(robotModelURDF,firstTime);
+symbolicDynamicFunction = symbolicInverseDynamics(robotModelURDF,firstTime);
 g =[0;0;-gravityAccelerationModulus]; % Gravity column vector
 % The external forces is a vector of (6,1). It has to be one per
 % link, expect the base link(which for now is considered fixed)
