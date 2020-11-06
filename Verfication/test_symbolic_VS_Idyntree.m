@@ -11,7 +11,7 @@ twoLink_urdf = '/home/iiticublap041/baljinder/urdf2eom/URDFs/twoLinks.urdf';
 kuka_kr210 = '/home/iiticublap041/baljinder/urdf2eom/URDFs/kuka_kr210.urdf';
 
 %% input urdf file to acquire robot structure
-robotModelURDF = kuka_urdf;
+robotModelURDF = kuka_kr210;
 
 %% Set the ID inputs for both iDyntree and symbolic function
 nrOfTests = 20;
@@ -21,15 +21,15 @@ symbolcResult = zeros(nrOfJoints,nrOfTests);
 jointAccMatlab_list = zeros(nrOfJoints,nrOfTests);
 jointAccSymbolic_list = zeros(nrOfJoints,nrOfTests);
 gravityModulus = 9.80665;
-% Use Matlab Robotic Toolbox
-% modelRobotMatlab = importrobot(robotModelURDF);
-% fext_matlab = zeros(nrOfJoints,6);
-% modelRobotMatlab.DataFormat = 'column';
-% modelRobotMatlab.Gravity = [0 0 -gravityModulus];
+%Use Matlab Robotic Toolbox
+modelRobotMatlab = importrobot(robotModelURDF);
+fext_matlab = zeros(nrOfJoints,6);
+modelRobotMatlab.DataFormat = 'column';
+modelRobotMatlab.Gravity = [0 0 -gravityModulus];
 
-id = true;
+id = false;
 fd = false;
-dynamicRegressor = false;
+dynamicRegressor = true;
 for i = 1:nrOfTests
     if id
         jointVel = zeros(nrOfJoints, 1);

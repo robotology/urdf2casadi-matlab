@@ -1,10 +1,10 @@
-function [forwardDynamicsFunction] = urdf2eomFD(file,geneate_c_code)
+function [forwardDynamicsFunction] = symbolicForwardDynamics(file,geneate_c_code)
 %Generates equation of motion in symbolic form from urdf file
 %Based on articulated body forward dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
 %Load urdf and convert to SMDS format
-smds = my_urdf2smds(file);
+smds = extractSystemModel(file);
 import casadi.*;
 %Initialize variables
 q = SX.sym('q',[1,smds.NB])';

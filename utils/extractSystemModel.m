@@ -1,4 +1,4 @@
-function [smds,model] = my_urdf2smds(file)
+function [smds,model] = extractSystemModel(file)
 %Converts URDF file to System Model Data Structure
 %as specified in http://royfeatherstone.org/spatial/v2/sysmodel.html
 %Load URDF
