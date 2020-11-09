@@ -7,7 +7,7 @@ It uses [CasADi](https://web.casadi.org/) to compute the symbolic expressions. I
 ## Installation
 The software has the following dependencies:
 * [MATLAB](https://www.mathworks.com/products/matlab.html);
-* [CasADi](https://web.casadi.org/): [Here](https://web.casadi.org/get/) you can find the instruction to install it.
+* [CasADi](https://web.casadi.org/): [Here](https://web.casadi.org/get/) you can find the instruction to install it. Remember to add CasAdi to the MATLAB path.
 
 ## Additional fetures
 [IDynTree](https://github.com/robotology/idyntree) has been used to validate the results of the symbolic models.
