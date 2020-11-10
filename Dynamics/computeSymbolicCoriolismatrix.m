@@ -21,9 +21,9 @@ for j = smds.NB:-1:1
     F1 = IC{j}*SDot{j} + BC{j}*S{j};
     F2 = IC{j}*S{j};
     F3 = (BC{j}.')*S{j};
-    C(j,j) = (S{j}.')*F1;
-    H(j,j) = (S{j}.')*F2;
-    HDot(j,j) = (SDot{j}.')*F2 + (S{j}.')*(F1+F3);
+    C{j,j} = (S{j}.')*F1;
+    H{j,j} = (S{j}.')*F2;
+    HDot{j,j} = (SDot{j}.')*F2 + (S{j}.')*(F1+F3);
     i = j;
     while i>0
         F1 = (Xup{i}.')*F1;
@@ -31,12 +31,12 @@ for j = smds.NB:-1:1
         F3 = (Xup{i}.')*F3; 
         i = smds.parent(i);
         if i~=0
-            C(i,j) = (S{i}.')*F1;
-            C(j,i) = ((SDot{i}.')*F2 + (S{i}.')*F3).';
-            H(i,j) = (S{i}.')*F2;
-            H(j,i) = H(i,j).';
-            HDot(i,j) = (SDot{i}.')*F2 + (S{i}.')*(F1+F3);
-            HDot(j,i) = HDot(i,j).';
+            C{i,j} = (S{i}.')*F1;
+            C{j,i} = ((SDot{i}.')*F2 + (S{i}.')*F3).';
+            H{i,j} = (S{i}.')*F2;
+            H{j,i} = H{i,j}.';
+            HDot{i,j} = (SDot{i}.')*F2 + (S{i}.')*(F1+F3);
+            HDot{j,i} = HDot{i,j}.';
         end  
     end
     if smds.parent(j)~=0
