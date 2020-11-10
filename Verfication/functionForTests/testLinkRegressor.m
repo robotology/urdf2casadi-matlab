@@ -1,4 +1,4 @@
-kuka_kr210 = '/home/iiticublap041/baljinder/urdf2eom/URDFs/kuka_kr210.urdf';
+kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
 robotModelURDF= kuka_kr210;
 %Load urdf and convert to SMDS format
 smds = extractSystemModel(robotModelURDF);

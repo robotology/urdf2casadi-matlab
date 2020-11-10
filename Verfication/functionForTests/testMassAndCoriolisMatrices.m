@@ -1,8 +1,8 @@
  
 %% First compute ID with idyntree 
 kuka_urdf = '/home/iiticublap041/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
-twoLink_urdf = '/home/iiticublap041/baljinder/urdf2eom/URDFs/twoLinks.urdf';
-kuka_kr210 = '/home/iiticublap041/baljinder/urdf2eom/URDFs/kuka_kr210.urdf';
+twoLink_urdf = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/twoLinks.urdf';
+kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
 robotURDFModel=kuka_kr210;
 jointPos = rand(6,1);
 jointVel = rand(6,1);
@@ -19,8 +19,10 @@ genealizedBias_IDyn = computeGeneralizedBiasForceIDynTree(robotURDFModel,jointPo
 %% Compute mass matrix with an efficient algorithm
 smds = extractSystemModel(robotURDFModel);
 g = [0;0;-gravityModulus];
-[H,HDot,C] = computeSymbolicCoriolismatrix(jointPos,jointVel,jointAcc,g,smds);
-
+[H_cell,HDot_cell,C_cell] = computeSymbolicCoriolismatrix(jointPos,jointVel,jointAcc,g,smds);
+H = cell2mat_casadi(H_cell);
+HDot = cell2mat_casadi(HDot_cell);
+C = cell2mat_casadi(C_cell);
 %% Compare mass matrix 
 e_massMatrix = abs(M_IDyn-H);
 assert (norm(e_massMatrix,'fro')<tol);
