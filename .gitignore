@@ -6,3 +6,18 @@
 
 # Temporary files
 *.m~
+
+# Simulink code generation folders
+slprj/
+sccprj/
+
+# Matlab code generation folders
+codegen/
+
+# Simulink autosave extension
+*.autosave
+
+# Simulink cache files
+*.slxc
+# Other Simulink files
+*.bak
