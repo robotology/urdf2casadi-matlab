@@ -19,7 +19,7 @@ genealizedBias_IDyn = computeGeneralizedBiasForceIDynTree(robotURDFModel,jointPo
 %% Compute mass matrix with an efficient algorithm
 smds = extractSystemModel(robotURDFModel);
 g = [0;0;-gravityModulus];
-[H_cell,HDot_cell,C_cell] = computeSymbolicCoriolismatrix(jointPos,jointVel,jointAcc,g,smds);
+[H_cell,HDot_cell,C_cell] = computeSymbolicCoriolismatrix(jointPos,jointVel,jointAcc,smds);
 H = cell2mat_casadi(H_cell);
 HDot = cell2mat_casadi(HDot_cell);
 C = cell2mat_casadi(C_cell);

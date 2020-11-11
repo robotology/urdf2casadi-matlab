@@ -1,8 +1,11 @@
-function [H,HDot,C] =computeSymbolicCoriolismatrix(q,qd,qdd,g,smds)
+function [H,HDot,C] =computeSymbolicCoriolismatrix(q,qd,qdd,smds)
 %Compute mass matrix, the derivative of the mass matrix and the Coriolis
 % matrix using Algorithm 1 from 
 % "Numerical Methods to Compute the Coriolis Matrix and Christoffel Symbols
 % for Rigid-Body System" by Sebastian Echeandia and Patrick M. Wensing
+
+% the gravity is not influencing the quantities we need
+g = [0;0;0];
 [~,~,S,Xup, v, ~] = computeKinematics (smds, q, qd, qdd, g);
 for i=1:smds.NB
     if smds.parent(i)==0

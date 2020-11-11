@@ -30,40 +30,11 @@ beta = tau_gravity - (C.')*qd;
 
 pHatDot = tau-beta+r;
 
-%% Formulate an integrator
-params = {q,qd,g,r};
-% Form an ode function
-ode = Function('ode',{params},{pHatDot});
-
-%%%%%%%%%%%% Creating a simulator %%%%%%%%%%
-N_steps_per_sample = 10;
-fs = 250; % Sampling frequency [hz]
-dt = 1/fs/N_steps_per_sample;
-
-% Build an integrator for this system: Runge Kutta 4 integrator
-k1 = ode(params);
-k2 = ode(params+dt/2.0*k1);
-k3 = ode(params+dt/2.0*k2);
-k4 = ode(params+dt*k3);
-
-states_final = params+dt/6.0*(k1+2*k2+2*k3+k4);
-
-% Create a function that simulates one step propagation in a sample
-one_step = Function('one_step',{params},{states_final});
-
-X = params;
-for i=1:N_steps_per_sample
-    X = one_step(params);
-end
-
-% Create a function that simulates all step propagation on a sample
-one_sample = Function('one_sample',{params}, {X});
-
-% speedup trick: expand into scalar operations
-one_sample = one_sample.expand();
-
-N = 10000;  % Number of samples
-all_samples = one_sample.mapaccum('all_samples', N);
 %%
+dae = struct('x',p,'p',[q;qd;tau;g;r],'ode',tau-beta+r);
+F = integrator('F', 'idas', dae);
+
+%%
+int = F;
 observerOutput = K*(p(q,qd) - int - p(0,0));
 end
