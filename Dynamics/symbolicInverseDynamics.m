@@ -1,4 +1,4 @@
-function [symbolicIDFunction] = symbolicInverseDynamics(file,geneate_c_code)
+function [symbolicIDFunction] = symbolicInverseDynamics(file,geneate_c_code,location_generated_fucntion)
 %Generates equation of motion in symbolic form from urdf file 
 %Based on RNEA inverse dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
@@ -38,7 +38,7 @@ for i = 1:smds.NB
 end
 
 % f_ext:one (6,1) vector per each link excluding the base(considered fixed for now) 
-%f = apply_external_forces( smds.parent, Xup, f, f_ext );
+f = apply_external_forces( smds.parent, Xup, f, f_ext );
 
 
 for i = smds.NB:-1:1
@@ -65,6 +65,8 @@ symbolicIDFunction=Function('rnea',{q,qd,qdd,g,F_ext},{tau},inputVarNames,output
 % symbolicIDFunction=Function('rnea',[{q,qd,qdd,g}],{tau},inputVarNames,outputVarName);
 %% Code generation option
 if geneate_c_code
+    current_folder = pwd;
+    cd(location_generated_fucntion);
     opts = struct('main', true,...
                   'mex', true);
     symbolicIDFunction.generate('rnea.c',opts);
@@ -76,4 +78,5 @@ if geneate_c_code
     if (T~=zeros(smds.NB,1))
         error('The compiled smds returns non null torques for all null inputs (gravity included)');
     end
+    cd(current_folder);
 end

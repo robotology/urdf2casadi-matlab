@@ -1,4 +1,4 @@
-function [HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,geneate_c_code)
+function [HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,geneate_c_code,location_generated_fucntion)
 %Create a symbolic function returning the Mass and Coriolis matrices as a
 %function of joint position, velocity. In addition it also returns the
 %derivative of the mass matrix
@@ -29,6 +29,8 @@ CFunction = Function('computeCoriolisMatrix',{q,qd},{C},...
                 
 %% Code generation option
 if geneate_c_code
+    current_folder = pwd;
+    cd(location_generated_fucntion);
     % Create c code
     opts = struct('main', true,...
                   'mex', true);
@@ -39,6 +41,7 @@ if geneate_c_code
     mex computeMassMatrix.c -DMATLAB_MEX_FILE
     mex computeMassMatrixTimeDerivative.c -DMATLAB_MEX_FILE
     mex computeCoriolisMatrix.c -DMATLAB_MEX_FILE
+    cd(current_folder);
 end
 
 end
