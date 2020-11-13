@@ -1,4 +1,4 @@
-function [jacobian,X,XForce,S] = createSpatialTransformsFunction(robotURDFModel,geneate_c_code,location_generated_fucntion)
+function [jacobian,X,XForce,S,O_X_ee] = createSpatialTransformsFunction(robotURDFModel,geneate_c_code,location_generated_fucntion)
 %Create symbolic and c code function for the spatial transform from a
 %general link i to any link j in its subtree
 
@@ -14,6 +14,9 @@ g = SX.sym('g',[3,1]);
 %% Compute the symbolic functions
 [X,XForce,S,Xup, ~, ~]  = computeKinematics (smds, q, qd, qdd, g);
 
+O_X_ee = Function('computesSpatialTransformFromBase',{q},{(X{1}{1,end})^(-1)},...
+                    {'joints_position'},...
+                    {'X'});
 % Jacobian 
 k_X_N = (X{1}{1,end}*Xup{1})^(-1);
 J = computeJacobian(k_X_N, Xup,S);
