@@ -1,4 +1,4 @@
-function [X,XForce,S] = createSpatialTransformsFunction(robotURDFModel,geneate_c_code,location_generated_fucntion)
+function [jacobian,X,XForce,S] = createSpatialTransformsFunction(robotURDFModel,geneate_c_code,location_generated_fucntion)
 %Create symbolic and c code function for the spatial transform from a
 %general link i to any link j in its subtree
 
@@ -12,11 +12,13 @@ qdd = SX.sym('qdd',[smds.NB,1]);
 g = SX.sym('g',[3,1]);
 
 %% Compute the symbolic functions
-[X,XForce,S, ~, ~, ~] = computeKinematics (smds, q, qd, qdd, g);
+[X,XForce,S,Xup, ~, ~]  = computeKinematics (smds, q, qd, qdd, g);
 
 % Jacobian 
-J = [S{:}];
-jacobian = Function('computeJacobian',{q},{J},...
+k_X_N = (X{1}{1,end}*Xup{1})^(-1);
+J = computeJacobian(k_X_N, Xup,S);
+J = [J{:}];
+jacobian = Function('computeNumericalJacobian',{q},{J},...
                     {'joints_position'},...
                     {'jacobian'});
 
@@ -28,10 +30,10 @@ if geneate_c_code
     % Create c code
     opts = struct('main', true,...
                   'mex', true);
-    jacobian.generate('computeJacobian.c',opts);
+    jacobian.generate('computeNumericalJacobian.c',opts);
     
     % Compile for matlab
-    mex computeJacobian.c -DMATLAB_MEX_FILE
+    mex computeNumericalJacobian.c -DMATLAB_MEX_FILE
 
     cd(current_folder);
 end
