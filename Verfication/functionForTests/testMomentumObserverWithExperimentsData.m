@@ -45,36 +45,30 @@ end
 
 %% Plot results
 timesInSeconds = sampling_period*(1:nrOfSamples);
-% plot_joint_trajectories(q, timesInSeconds,'q');
-% plot_joint_trajectories(qd, timesInSeconds,'dq');
-% plot_joint_trajectories(qdd, timesInSeconds,'ddq');
-% plot_joint_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
+plot_joint_trajectories(q, timesInSeconds,'q');
+plot_joint_trajectories(qd, timesInSeconds,'dq');
+plot_joint_trajectories(qdd, timesInSeconds,'ddq');
+plot_joint_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
 
 
 % Store trajectories as timeseries for simulink
 % Filter the data with an exponential filter
 q_timeseries = timeseries(q);
 qd_timeseries = timeseries(qd);
-% [ tau ] = expsmooth( tau, 1/sampling_period, 100 );
 tauMotor_timeseries = timeseries(tau);
 tauFriction_timeseries = timeseries(efe.estimatedFrictionTorques_list');
 
-observerEstimation  = expsmooth( out.observerEstimatedForce.Data, 1/sampling_period , 1000 );
+% After launching this script one can visualze the results also from matlab
+% by setting `simulink_finished` to true
+simulink_finished = false;
+if simulink_finished
+    IDEstimation  = expsmooth( efe.estimatedExternalForces_list(:,1:29160)', 1/sampling_period, 1000 );
+    observerEstimation  = expsmooth( out.observerEstimatedForce.Data, 1/sampling_period , 1000 );
+    subplot(2,1,1);
+    plot(IDEstimation);title('Inverse dynamics estimation');
+    legend('force x','force y','force z', 'tau x', 'tau y', 'tau z');
+    subplot(2,1,2);
+    plot(observerEstimation);title('Observer based estimation');
+    legend('force x','force y','force z', 'tau x', 'tau y', 'tau z');
+end
 
-% base_observerEstimation = zeros(nrOfSamples,6);
-% for t = 1:nrOfSamples
-%     base_observerEstimation(t,:) = full(O_X_ee(q(t,:))*out.observerEstimatedForce.Data(t,:)')';
-% end
-IDEstimation  = expsmooth( efe.estimatedExternalForces_list(:,1:29160)', 1/sampling_period, 1000 );
-
-subplot(2,1,1);
-plot(IDEstimation);title('Inverse dynamics estimation');
-legend('force x','force y','force z', 'tau x', 'tau y', 'tau z');
-subplot(2,1,2);
-plot(observerEstimation);title('Observer based estimation');
-legend('force x','force y','force z', 'tau x', 'tau y', 'tau z');
-
-% N = size(dataset.timestampInSeconds,1);
-% for i = 1:N
-%     measuredJointTorques(:,i) = Kt*K_gear_coup*dataset.trqSetMotorSide(i,:)';
-% end
