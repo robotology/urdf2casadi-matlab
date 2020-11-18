@@ -10,27 +10,35 @@ kuka_urdf = '/home/iiticublap041/idjl-model-identification/results/identificatio
 location_tests_folder = pwd;
 twoLink_urdf = [location_tests_folder,'/../URDFs/twoLinks.urdf'];
 kuka_kr210 = [location_tests_folder,'/../URDFs/kuka_kr210.urdf'];
-
+iCub_r_leg = [location_tests_folder,'/../URDFs/iCub_r_leg.urdf'];
+location_generated_fucntion = [location_tests_folder,'/../automaticallyGeneratedFunctions'];
 %% input urdf file to acquire robot structure
-robotModelURDF = kuka_kr210;
+robotModelURDF = iCub_r_leg;
 
+%% Get number of joints using iDynTree
+mdlLoader = iDynTree.ModelLoader();
+mdlLoader.loadModelFromFile(robotModelURDF);
+
+kinDynComp = iDynTree.KinDynComputations();
+kinDynComp.loadRobotModel(mdlLoader.model());
+
+nrOfJoints = kinDynComp.model().getNrOfDOFs();
 %% Set the ID inputs for both iDyntree and symbolic function
-nrOfTests = 20;
-nrOfJoints = 6;
+nrOfTests = 5;
 iDynResult = zeros(nrOfJoints,nrOfTests);
 symbolcResult = zeros(nrOfJoints,nrOfTests);
 jointAccMatlab_list = zeros(nrOfJoints,nrOfTests);
 jointAccSymbolic_list = zeros(nrOfJoints,nrOfTests);
 gravityModulus = 9.80665;
 %Use Matlab Robotic Toolbox
-modelRobotMatlab = importrobot(robotModelURDF);
-fext_matlab = zeros(nrOfJoints,6);
-modelRobotMatlab.DataFormat = 'column';
-modelRobotMatlab.Gravity = [0 0 -gravityModulus];
+% modelRobotMatlab = importrobot(robotModelURDF);
+% fext_matlab = zeros(nrOfJoints,6);
+% modelRobotMatlab.DataFormat = 'column';
+% modelRobotMatlab.Gravity = [0 0 -gravityModulus];
 
-id = false;
+id = true;
 fd = false;
-dynamicRegressor = true;
+dynamicRegressor = false;
 for i = 1:nrOfTests
     if id
         jointVel = zeros(nrOfJoints, 1);
@@ -44,11 +52,11 @@ for i = 1:nrOfTests
             jointVel = rand;
             jointAcc = rand;
         end
-        [tau_iDynTree, tau_symbolic_function] = compareIDyntreeVSSymbolic(jointPos,jointVel,jointAcc,gravityModulus,robotModelURDF);
+        [tau_iDynTree, tau_symbolic_function] = compareIDyntreeVSSymbolic(jointPos,jointVel,jointAcc,gravityModulus,robotModelURDF,location_generated_fucntion);
         iDynResult(:,i) = tau_iDynTree;
         symbolcResult(:,i)= tau_symbolic_function;
-        % jointTorqMatlab(:,i) = inverseDynamics(model_matlab,jointPos,jointVel,jointAcc,fext_matlab);
-        [tau_regressor, tau_RNEA] = computeIDWithDynamicRegressorAndRNEA(jointPos,jointVel,jointAcc, gravityModulus,robotModelURDF);
+         %jointTorqMatlab(:,i) = inverseDynamics(model_matlab,jointPos,jointVel,jointAcc,fext_matlab);
+        [tau_regressor, tau_RNEA] = computeIDWithDynamicRegressorAndRNEA(jointPos,jointVel,jointAcc, gravityModulus,robotModelURDF,location_generated_fucntion);
         tau_regressor_list(:,i) = tau_regressor;
         tau_RNEA_list(:,i) = tau_RNEA;
     end

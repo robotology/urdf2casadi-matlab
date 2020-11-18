@@ -3,10 +3,12 @@
 kuka_urdf = '/home/iiticublap041/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
 twoLink_urdf = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/twoLinks.urdf';
 kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
-robotURDFModel=kuka_kr210;
-jointPos = rand(6,1);
-jointVel = rand(6,1);
-jointAcc = rand(6,1);
+iCub_r_leg = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/iCub_r_leg.urdf';
+robotURDFModel=kuka_urdf;
+nrOfJoints = 6;
+jointPos = rand(nrOfJoints,1);
+jointVel = rand(nrOfJoints,1);
+jointAcc = rand(nrOfJoints,1);
 gravityModulus = 9.80665;
 tol = 1e-10;
 % Compute mass matrix with IDynTree
