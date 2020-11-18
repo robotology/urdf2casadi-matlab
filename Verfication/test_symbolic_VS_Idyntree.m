@@ -1,7 +1,7 @@
 %% This is a script to compare the result of the symbolic expression with the result obtained using iDynTree(https://github.com/robotology/idyntree)
-% addpath('xml2struct')
-% addpath('URDFs')
-% addpath('Spatial')
+
+% Clear workspace
+clear all;
 % Add casadi to Matlab path
 locationCasADi = '/home/iiticublap041/casadi-linux-matlabR2014b-v3.5.3';
 addpath(locationCasADi);
@@ -12,106 +12,104 @@ twoLink_urdf = [location_tests_folder,'/../URDFs/twoLinks.urdf'];
 kuka_kr210 = [location_tests_folder,'/../URDFs/kuka_kr210.urdf'];
 
 %% input urdf file to acquire robot structure
-robotModelURDF = kuka_kr210;
-
+robotModelURDF = kuka_urdf;
+location_generated_functions = '/home/iiticublap041/baljinder/urdf2casadi-matlab/automaticallyGeneratedFunctions';
 %% Set the ID inputs for both iDyntree and symbolic function
+smds = extractSystemModel(robotModelURDF);
+nrOfJoints = smds.NB;
 nrOfTests = 20;
-nrOfJoints = 6;
-iDynResult = zeros(nrOfJoints,nrOfTests);
-symbolcResult = zeros(nrOfJoints,nrOfTests);
+iDynResult_list = zeros(nrOfJoints,nrOfTests);
+symbolcResult_list = zeros(nrOfJoints,nrOfTests);
 jointAccMatlab_list = zeros(nrOfJoints,nrOfTests);
 jointAccSymbolic_list = zeros(nrOfJoints,nrOfTests);
+tau_regressor_list = zeros(nrOfJoints,nrOfTests);
+tau_RNEA_list = zeros(nrOfJoints,nrOfTests);
 gravityModulus = 9.80665;
-%Use Matlab Robotic Toolbox
-modelRobotMatlab = importrobot(robotModelURDF);
-fext_matlab = zeros(nrOfJoints,6);
-modelRobotMatlab.DataFormat = 'column';
-modelRobotMatlab.Gravity = [0 0 -gravityModulus];
-
-id = false;
+id = true;
 fd = false;
 dynamicRegressor = true;
-for i = 1:nrOfTests
-    if id
-        jointVel = zeros(nrOfJoints, 1);
-        jointAcc = zeros(nrOfJoints, 1);
-        if nrOfJoints ==6
-            jointPos = [pi/6 0 0 0 0 0]';
-            jointVel = rand(6,1);
-            jointAcc = rand(6,1);
-        elseif nrOfJoints ==1
-            jointPos = rand;
-            jointVel = rand;
-            jointAcc = rand;
-        end
-        [tau_iDynTree, tau_symbolic_function] = compareIDyntreeVSSymbolic(jointPos,jointVel,jointAcc,gravityModulus,robotModelURDF);
-        iDynResult(:,i) = tau_iDynTree;
-        symbolcResult(:,i)= tau_symbolic_function;
-        % jointTorqMatlab(:,i) = inverseDynamics(model_matlab,jointPos,jointVel,jointAcc,fext_matlab);
-        [tau_regressor, tau_RNEA] = computeIDWithDynamicRegressorAndRNEA(jointPos,jointVel,jointAcc, gravityModulus,robotModelURDF);
-        tau_regressor_list(:,i) = tau_regressor;
-        tau_RNEA_list(:,i) = tau_RNEA;
-    end
-    if fd
-        if nrOfJoints ==6
-            jointPos = [0 0 0 0 0 0]';
-            jointVel = rand(6,1);
-            tau      = rand(nrOfJoints,1);
-        elseif nrOfJoints ==1
-            jointPos = 1;
-            jointVel = 1;
-            tau = 100;
-        end
+
+if id
+    %% Compute the symbolic model
+    symbolicDynamicFunction = symbolicInverseDynamics(robotModelURDF,0, location_generated_functions);
+    % The external forces is a vector of (6,1). It has to be one per
+    % link, expect the base link(which for now is considered fixed)
+    extForce = zeros(6,nrOfJoints);
+    g = [0, 0, -gravityModulus]';
+    for i = 1:nrOfTests
+        jointPos = [pi/6 0 0 0 0 0]';
+        jointPos = rand(nrOfJoints,1);
+        jointVel = rand(nrOfJoints,1);
+        jointAcc = rand(nrOfJoints,1);
         
+        tau_symbolic_function = symbolicDynamicFunction(jointPos, jointVel, jointAcc, g,extForce);
+        tau_symbolic_function = full(tau_symbolic_function);
+        
+        iDynResult_list(:,i) = computeInverseDynamicsIDynTree(robotModelURDF,jointPos',jointVel',jointAcc',gravityModulus);
+        symbolcResult_list(:,i)= tau_symbolic_function;
+    end
+    eps_t1 = abs(iDynResult_list'-symbolcResult_list');
+    figure;
+    plot(eps_t1);title('Inverse Dynamics: abs(tau_{iDyn} - tau_{symb})');legend;   
+end
+if fd
+     %Use Matlab Robotic Toolbox                                                                                                                               
+    modelRobotMatlab = importrobot(robotModelURDF);                                                                                                          
+    fext_matlab = zeros(nrOfJoints,6);                                                                                                                      
+    modelRobotMatlab.DataFormat = 'column';                                                                              
+    modelRobotMatlab.Gravity = [0 0 -gravityModulus]; 
+    
+    for i = 1:nrOfTests
+        jointPos = rand(nrOfJoints,1);
+        jointVel = rand(nrOfJoints,1);
+        tau      = rand(nrOfJoints,1);
+
         [jointAccMatlab, jointAccSymbolic] = ...
         computeIDyntreeFD_VS_Symblic(modelRobotMatlab, jointPos,jointVel,gravityModulus,tau,robotModelURDF);
         jointAccMatlab_list(:,i) = jointAccMatlab;
         jointAccSymbolic_list(:,i)= jointAccSymbolic;
-        disp('Matlab:')
-        disp(jointAccMatlab_list(:,i))
-        disp('Symbolic:')
-        disp(jointAccSymbolic_list(:,i))
     end
-
-    if dynamicRegressor
-        jointVel = zeros(nrOfJoints, 1);
-        jointAcc = zeros(nrOfJoints, 1);
-        if nrOfJoints ==6
-            jointPos = [pi/6 0 0 0 0 0]';
-            jointVel = rand(6,1);
-            jointAcc = rand(6,1);
-        elseif nrOfJoints ==1
-            jointPos = rand;
-            jointVel = rand;
-            jointAcc = rand;
-        end
-    [tau_regressor, tau_RNEA] = computeIDWithDynamicRegressorAndRNEA(jointPos,jointVel,jointAcc, gravityModulus,robotModelURDF);
-    tau_regressor_list(:,i) = tau_regressor;
-    tau_RNEA_list(:,i) = tau_RNEA;
-    end
-end
-if id 
-    clear firstTime 
-    figure;
-    eps_t1 = abs(iDynResult'-symbolcResult');
-    plot(eps_t1);title('abs(iDynResult - symbolcResult)');legend;
-    eps_t3 = abs(tau_RNEA_list'-tau_regressor_list');
-    figure;
-    plot(eps_t3);title('abs(tau_{RNEA} - tau_{regressor})');legend;  
-end
-if fd
-    clear firstTime 
+    
     eps_t2 = abs(jointAccMatlab_list'-jointAccSymbolic_list');
-    plot(eps_t2);title('abs(jointAccMatlab - jointAccSymbolic)');legend;    
+    figure;
+    plot(eps_t2);title('Forward Dynamics: abs(ddq_{matlab} - ddq_{symb})');legend;    
 end
 if dynamicRegressor
-    clear firstTime 
+     
+    % Sumbolic Inverse Dyncamics function
+    symbolicIDFunction = symbolicInverseDynamics(robotModelURDF,0,location_generated_functions);
+    % Gravity column vector
+    g =[0;0;-gravityModulus];
+    % Test with symbolic function
+    % If we do not supply the external forces they are NOT automatically considered null in the symbolic function
+    nrOfJoints = size(jointPos,1);
+    extForce = zeros(6,nrOfJoints);
+     
+    % Rettrive Inertia parameters
+    smds = extractSystemModel(robotModelURDF);
+    for i = 1:nrOfJoints
+        p(:,i) = [smds.mass{i}; smds.mass{i}*smds.com{i}; smds.I{i}(1,1); smds.I{i}(1,2); smds.I{i}(1,3);...
+                               smds.I{i}(2,2); smds.I{i}(2,3); smds.I{i}(3,3)]; 
+    end
+    inertiaParameters = reshape(p,[],1);
+    % Symbolic regressor
+    Y = inverseDynamicsInertialParametersRegressor(robotModelURDF,0,location_generated_functions);
+
+     for i = 1:nrOfTests
+        jointPos = rand(nrOfJoints,1);
+        jointVel = rand(nrOfJoints,1);
+        jointAcc = rand(nrOfJoints,1);
+
+        tau_RNEA = symbolicIDFunction(jointPos, jointVel, jointAcc, g,extForce);
+        tau_RNEA = full(tau_RNEA);
+        
+        tau_regressor = Y(jointPos, jointVel, jointAcc, g)*inertiaParameters;
+        tau_regressor = full(tau_regressor);
+        
+        tau_regressor_list(:,i) = tau_regressor;
+        tau_RNEA_list(:,i) = tau_RNEA;
+    end
     eps_t3 = abs(tau_RNEA_list'-tau_regressor_list');
     figure;
-    plot(eps_t3);title('abs(tau_{RNEA} - tau_{regressor})');legend;    
+    plot(eps_t3);title('abs(tau_{RNEA} - tau_{regressor})');legend;   
 end
-%% Use Matlab RoboticToolbox
-% eps_matlab = abs(jointTorqMatlab'-symbolcResult');
-% eps_idynMatlab = abs(iDynResult'-jointTorqMatlab');
-% plot(eps_matlab);title('abs(jointTorqMatlab - symbolcResult)');legend;
-% plot(eps_idynMatlab);title('abs(iDynResult - jointTorqMatlab)');legend;

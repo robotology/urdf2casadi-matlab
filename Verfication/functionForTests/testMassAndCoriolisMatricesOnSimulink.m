@@ -1,8 +1,10 @@
+%% Test on Simulink Algorithm 1 from  "Numerical Methods to Compute the Coriolis Matrix and Christoffel Symbols for Rigid-Body System" 
+% by Sebastian Echeandia and Patrick M. Wensing
 %% First compute ID with idyntree 
 kuka_urdf = '/home/iiticublap041/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
 twoLink_urdf = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/twoLinks.urdf';
 kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
-robotURDFModel = kuka_urdf;
+robotURDFModel = kuka_kr210;
 
 %% Generate functions
 location_generated_fucntion = '/home/iiticublap041/baljinder/urdf2casadi-matlab/automaticallyGeneratedFunctions';
@@ -35,43 +37,24 @@ gravityModulus = 0;
 g = [0;0;-gravityModulus];
 nrOfSamples = trajectoryDuration/sampling_period +1;
 tau_rnea = zeros(nrOfSamples,nrOfJoints);
-tau_ext = zeros(nrOfSamples,nrOfJoints);
+
 jacobian_inTime = zeros(6,nrOfJoints,nrOfSamples);
 % Some external force for the simulation
 F_ext = zeros(6,nrOfJoints);
-% Test non null external force pushing against the end effector
-% recall that we are using spatial forces as described in Featherstone(2008)
-F_ext(:,end) = [0 0 0 10 10 0]';
-
 for t = 1:nrOfSamples
     tau_rnea(t,:) = rnea(q(t,:),qd(t,:),qdd(t,:),g,F_ext)';
-    tau_ext(t,:)  = (full(jacobian(q(t,:))).'*F_ext(:,end))';
-    jacobian_inTime(:,:,t) = full(jacobian(q(t,:)));
 end
-% tau = computeInverseDynamicsIDynTree(robotURDFModel,q,qd,qdd,gravityModulus);
-
-%% Simulate in MATLAB
-% simulateObserverMatlab;
-
 %% Plot results
 timesInSeconds = sampling_period*(1:nrOfSamples);
 plot_joint_trajectories(q, timesInSeconds,'q');
 plot_joint_trajectories(qd, timesInSeconds,'dq');
 plot_joint_trajectories(qdd, timesInSeconds,'ddq');
-% plot_joint_trajectories(tau, timesInSeconds,'tau');
 plot_joint_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
-plot_joint_trajectories(tau_ext, timesInSeconds,'tau_{ext}');
 
 
 % Store trajectories as timeseries for simulink
-% Filter the data with an exponential filter
 q_data = timeseries(q);
 qd_data = timeseries(qd);
 qdd_data = timeseries(qdd);
 tau_data = timeseries(tau_rnea);
 
-
-% N = size(dataset.timestampInSeconds,1);
-% for i = 1:N
-%     measuredJointTorques(:,i) = Kt*K_gear_coup*dataset.trqSetMotorSide(i,:)';
-% end
