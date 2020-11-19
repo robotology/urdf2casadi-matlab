@@ -55,12 +55,12 @@ end
 
 %% Plot results
 timesInSeconds = sampling_period*(1:nrOfSamples);
-plot_joint_trajectories(q, timesInSeconds,'q');
-plot_joint_trajectories(qd, timesInSeconds,'dq');
-plot_joint_trajectories(qdd, timesInSeconds,'ddq');
-% plot_joint_trajectories(tau, timesInSeconds,'tau');
-plot_joint_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
-plot_joint_trajectories(tau_ext, timesInSeconds,'tau_{ext}');
+plot_trajectories(q, timesInSeconds,'q');
+plot_trajectories(qd, timesInSeconds,'dq');
+plot_trajectories(qdd, timesInSeconds,'ddq');
+% plot_trajectories(tau, timesInSeconds,'tau');
+plot_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
+plot_trajectories(tau_ext, timesInSeconds,'tau_{ext}');
 
 
 % Store trajectories as timeseries for simulink

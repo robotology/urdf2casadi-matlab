@@ -45,10 +45,10 @@ end
 
 %% Plot results
 timesInSeconds = sampling_period*(1:nrOfSamples);
-plot_joint_trajectories(q, timesInSeconds,'q');
-plot_joint_trajectories(qd, timesInSeconds,'dq');
-plot_joint_trajectories(qdd, timesInSeconds,'ddq');
-plot_joint_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
+plot_trajectories(q, timesInSeconds,'q');
+plot_trajectories(qd, timesInSeconds,'dq');
+plot_trajectories(qdd, timesInSeconds,'ddq');
+plot_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
 
 
 % Store trajectories as timeseries for simulink
@@ -62,7 +62,7 @@ tauFriction_timeseries = timeseries(efe.estimatedFrictionTorques_list');
 % by setting `simulink_finished` to true
 simulink_finished = false;
 if simulink_finished
-    IDEstimation  = expsmooth( efe.estimatedExternalForces_list(:,1:29160)', 1/sampling_period, 1000 );
+    IDEstimation  = expsmooth( efe.estimatedExternalForces_list', 1/sampling_period, 1000 );
     observerEstimation  = expsmooth( out.observerEstimatedForce.Data, 1/sampling_period , 1000 );
     subplot(2,1,1);
     plot(IDEstimation);title('Inverse dynamics estimation');

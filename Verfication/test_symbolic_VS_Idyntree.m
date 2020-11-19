@@ -12,9 +12,11 @@ location_tests_folder = pwd;
 twoLink_urdf = [location_tests_folder,'/../URDFs/twoLinks.urdf'];
 kuka_kr210 = [location_tests_folder,'/../URDFs/kuka_kr210.urdf'];
 iCub_r_leg = [location_tests_folder,'/../URDFs/iCub_r_leg.urdf'];
+handTaken_iCub_r_leg = [location_tests_folder,'/../URDFs/handTaken_iCub_r_leg.urdf'];
+
 location_generated_fucntion = [location_tests_folder,'/../automaticallyGeneratedFunctions'];
 %% input urdf file to acquire robot structure
-robotModelURDF = kuka_kr210;
+robotModelURDF = iCub_r_leg;
 
 %% Get number of joints using iDynTree
 mdlLoader = iDynTree.ModelLoader();
@@ -37,7 +39,7 @@ gravityModulus = 9.80665;
 
 id = true;
 fd = false;
-dynamicRegressor = true;
+dynamicRegressor = false;
 
 if id
     %% Compute the symbolic model
@@ -47,7 +49,6 @@ if id
     extForce = zeros(6,nrOfJoints);
     g = [0, 0, -gravityModulus]';
     for i = 1:nrOfTests
-        jointPos = [pi/6 0 0 0 0 0]';
         jointPos = rand(nrOfJoints,1);
         jointVel = rand(nrOfJoints,1);
         jointAcc = rand(nrOfJoints,1);
