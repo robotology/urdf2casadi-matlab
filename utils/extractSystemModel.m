@@ -45,49 +45,22 @@ for i = 1:smds.NB
     smds.mass{1,i} = m;
     smds.com{1,i} = com.';
     smds.rpy{1,i} = rpy.';
+
+    %% Store link names
+    [linkName, jointName] = setLinkAndJointName(model, i);
+    smds.linkName{i} = linkName;
+    smds.jointName{i} = jointName;     
 end
-%% Accorporate bodies connected by `fixed`  joints 
-% Find indeces of fixed joints
-fixedJoints = find(ismember(smds.jtype,'fixed'));
+% Store also inertia of the base link
+[I0,m0,com0,rpy0] = computeInertiaWrtCenterOfMass(model, 0);
+smds.I_base = I0;
+smds.mass_base = m0;
+smds.com_base = com0;
+smds.rpy_base = rpy0;
 
-if ~isempty(fixedJoints)
-    % Remove fixed joints from list of joint types and axis
-    smds.jtype(fixedJoints) = [];
-    smds.jaxis(fixedJoints) = [];
-
-    for j = 1:max(size(fixedJoints))
-
-        % Update the transform considering that the joint is fixed 
-        % Exclude the last joint as it connects with the end effector and no
-        % link down this subtree will feel the presence of the fixed joint, if not only fo the inertia(which must be summed)
-        if fixedJoints(end) < smds.NB
-            smds.Xtree{fixedJoints(j)+1} = smds.Xtree{fixedJoints(j)+1}*smds.Xtree{fixedJoints(j)};
-        end
-        % Update parents list
-        if  fixedJoints(1)>=1 && fixedJoints(end)< smds.NB
-            smds.parent(fixedJoints(j)+1) = fixedJoints(j)-1;
-        end
-        % Delete from the list of parents the entry of the body with index
-        % fixedJoint(j), even if it connects with the base link
-        smds.parent(fixedJoints(j)) = [];
-
-        % Update spatial inertia matrix of bodies connected by fixed joints
-        % Sum the spatial inertia of the body connected by the fixed joint by
-        % first expressing the inestia in the same reference frame
-        % Exclude the first joint from the count:
-        % If the joint connecting the first link with the base link is fixed
-        % its inertia is added to the base link, which for now is condered
-        % fixed.
-        if fixedJoints(1)~=1
-            smds.I{1,fixedJoints(j)} = smds.I{1,fixedJoints(j)-1} + (smds.Xtree{fixedJoints(j)}.')*smds.I{1,fixedJoints(j)-1}*smds.Xtree{fixedJoints(j)};
-        end
-        % Delete body at fixedJoints(j) index from body list
-        smds.I(fixedJoints(j)) = [];
-        % Delete fixed joint from joint list
-        smds.Xtree(fixedJoints(j)) = [];
-
-    end
-    % Update the final number of considered joints
-    smds.NB = smds.NB - max(size(fixedJoints));
-end
+% Store base link name
+[baseLinkName, ~] = setLinkAndJointName(model, 0);
+smds.baseLinkName = baseLinkName;
+%% Account for fixed joints
+smds = accountForFixedJoint(smds);
 end
