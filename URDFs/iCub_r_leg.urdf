@@ -589,4 +589,280 @@
       </geometry>
     </collision>
   </link>
+  <link name="base_link"/>
+  <joint name="base_link_fixed_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="base_link"/>
+  </joint>
+  <link name="torso_1"/>
+  <joint name="torso_1_fixed_joint" type="fixed">
+    <origin xyz="0 0 0.0605" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="torso_1"/>
+  </joint>
+  <link name="l_hip_1"/>
+  <joint name="l_hip_1_fixed_joint" type="fixed">
+    <origin xyz="0.0216 0.04045000000000001 0" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_hip_1"/>
+  </joint>
+  <link name="l_hip_2"/>
+  <joint name="l_hip_2_fixed_joint" type="fixed">
+    <origin xyz="-0.02565 0.07355 -0.009000000000000008" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_hip_2"/>
+  </joint>
+  <link name="l_hip_3"/>
+  <joint name="l_hip_3_fixed_joint" type="fixed">
+    <origin xyz="0.011049999999999997 0.07355 -0.09869999999999995" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_hip_3"/>
+  </joint>
+  <link name="l_leg_ft_sensor"/>
+  <joint name="l_leg_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="0.011049999999999997 0.07355 -0.09869999999999995" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_leg_ft_sensor"/>
+  </joint>
+  <link name="l_upper_leg"/>
+  <joint name="l_upper_leg_fixed_joint" type="fixed">
+    <origin xyz="0.011049999999999997 0.05855 -0.16960000000000003" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_upper_leg"/>
+  </joint>
+  <link name="l_lower_leg"/>
+  <joint name="l_lower_leg_fixed_joint" type="fixed">
+    <origin xyz="0.026049999999999997 0.08345000000000001 -0.2758" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_lower_leg"/>
+  </joint>
+  <link name="l_ankle_1"/>
+  <joint name="l_ankle_1_fixed_joint" type="fixed">
+    <origin xyz="0.026049999999999997 0.08295000000000001 -0.5317890000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_ankle_1"/>
+  </joint>
+  <link name="l_ankle_2"/>
+  <joint name="l_ankle_2_fixed_joint" type="fixed">
+    <origin xyz="-0.02670000000000001 0.06475 -0.5667890000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_ankle_2"/>
+  </joint>
+  <link name="l_foot_rear"/>
+  <joint name="l_foot_rear_fixed_joint" type="fixed">
+    <origin xyz="-0.010700000000000008 0.06475 -0.6325890000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_foot_rear"/>
+  </joint>
+  <link name="l_sole"/>
+  <joint name="l_sole_fixed_joint" type="fixed">
+    <origin xyz="0.048929999999999994 0.06475 -0.6325890000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_sole"/>
+  </joint>
+  <link name="l_foot_rear_ft_sensor"/>
+  <joint name="l_foot_rear_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="-0.010700000000000008 0.06475 -0.6325890000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_foot_rear_ft_sensor"/>
+  </joint>
+  <link name="l_foot_front"/>
+  <joint name="l_foot_front_fixed_joint" type="fixed">
+    <origin xyz="0.10854999999999998 0.06475 -0.6325890000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_foot_front"/>
+  </joint>
+  <link name="l_foot_front_ft_sensor"/>
+  <joint name="l_foot_front_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="0.10854999999999998 0.06475 -0.6325890000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="l_foot_front_ft_sensor"/>
+  </joint>
+  <link name="torso_2"/>
+  <joint name="torso_2_fixed_joint" type="fixed">
+    <origin xyz="0 0 0.133" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="torso_2"/>
+  </joint>
+  <link name="chest"/>
+  <joint name="chest_fixed_joint" type="fixed">
+    <origin xyz="0 0 0.19747000000000003" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="chest"/>
+  </joint>
+  <link name="l_shoulder_1"/>
+  <joint name="l_shoulder_1_fixed_joint" type="fixed">
+    <origin xyz="-0.020835100000000002 0.0397423 0.3026729" rpy="0.2532616237670649 -1.1982921379466467e-7 -0.26179930185680106"/>
+    <parent link="root_link"/>
+    <child link="l_shoulder_1"/>
+  </joint>
+  <link name="r_shoulder_1"/>
+  <joint name="r_shoulder_1_fixed_joint" type="fixed">
+    <origin xyz="-0.020835100000000002 -0.0397423 0.3026729" rpy="-0.25326164431680925 2.3014774394592079e-7 0.26179970938509745"/>
+    <parent link="root_link"/>
+    <child link="r_shoulder_1"/>
+  </joint>
+  <link name="neck_1"/>
+  <joint name="neck_1_fixed_joint" type="fixed">
+    <origin xyz="-0.00378849 0 0.3627695" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="neck_1"/>
+  </joint>
+  <link name="neck_2"/>
+  <joint name="neck_2_fixed_joint" type="fixed">
+    <origin xyz="0.0048615099999999994 0 0.4117695" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="neck_2"/>
+  </joint>
+  <link name="neck_3"/>
+  <joint name="neck_3_fixed_joint" type="fixed">
+    <origin xyz="0.0048615099999999994 0 0.42127000000000003" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="neck_3"/>
+  </joint>
+  <link name="head"/>
+  <joint name="head_fixed_joint" type="fixed">
+    <origin xyz="0.0048615099999999994 0 0.4904200000000001" rpy="0 -0 0"/>
+    <parent link="root_link"/>
+    <child link="head"/>
+  </joint>
+  <link name="r_shoulder_2"/>
+  <joint name="r_shoulder_2_fixed_joint" type="fixed">
+    <origin xyz="0.014310500000000032 -0.14197200000000007 0.33100070000000004" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_shoulder_2"/>
+  </joint>
+  <link name="r_shoulder_3"/>
+  <joint name="r_shoulder_3_fixed_joint" type="fixed">
+    <origin xyz="0.011602500000000036 -0.14719400000000007 0.27658740000000004" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_shoulder_3"/>
+  </joint>
+  <link name="r_arm_ft_sensor"/>
+  <joint name="r_arm_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="0.011602500000000036 -0.14719400000000007 0.27658740000000004" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_arm_ft_sensor"/>
+  </joint>
+  <link name="r_upper_arm"/>
+  <joint name="r_upper_arm_fixed_joint" type="fixed">
+    <origin xyz="0.013208121282148412 -0.14858702223380166 0.2541880957400964" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_upper_arm"/>
+  </joint>
+  <link name="r_elbow_1"/>
+  <joint name="r_elbow_1_fixed_joint" type="fixed">
+    <origin xyz="0.031246121282148414 -0.1520930222338017 0.13144299574009638" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_elbow_1"/>
+  </joint>
+  <link name="r_forearm"/>
+  <joint name="r_forearm_fixed_joint" type="fixed">
+    <origin xyz="0.021311021282148408 -0.16151002223380165 0.0757679957400964" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_forearm"/>
+  </joint>
+  <link name="r_wrist_1"/>
+  <joint name="r_wrist_1_fixed_joint" type="fixed">
+    <origin xyz="0.045183921282148404 -0.16567102223380167 -0.030245004259903563" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_wrist_1"/>
+  </joint>
+  <link name="r_hand"/>
+  <joint name="r_hand_fixed_joint" type="fixed">
+    <origin xyz="0.027649815623035374 -0.16337301732292386 -0.031644925317804405" rpy="-0.07907934249382903 -0.0520316044795478 0.2752784843541201"/>
+    <parent link="root_link"/>
+    <child link="r_hand"/>
+  </joint>
+  <link name="l_shoulder_2"/>
+  <joint name="l_shoulder_2_fixed_joint" type="fixed">
+    <origin xyz="0.011907900000000013 0.14265000000000003 0.3308707" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_shoulder_2"/>
+  </joint>
+  <link name="l_shoulder_3"/>
+  <joint name="l_shoulder_3_fixed_joint" type="fixed">
+    <origin xyz="0.01160250023188351 0.14719399989874468 0.2765873999902195" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_shoulder_3"/>
+  </joint>
+  <link name="l_arm_ft_sensor"/>
+  <joint name="l_arm_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="0.01160250023188351 0.14719399989874468 0.2765873999902195" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_arm_ft_sensor"/>
+  </joint>
+  <link name="l_upper_arm"/>
+  <joint name="l_upper_arm_fixed_joint" type="fixed">
+    <origin xyz="0.013208121959356507 0.14858702204000246 0.2541880957564809" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_upper_arm"/>
+  </joint>
+  <link name="l_elbow_1"/>
+  <joint name="l_elbow_1_fixed_joint" type="fixed">
+    <origin xyz="0.031246122657570638 0.15209302229214877 0.13144299586628905" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_elbow_1"/>
+  </joint>
+  <link name="l_forearm"/>
+  <joint name="l_forearm_fixed_joint" type="fixed">
+    <origin xyz="0.021311022773212826 0.16151002194112832 0.07576799578628049" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_forearm"/>
+  </joint>
+  <link name="l_wrist_1"/>
+  <joint name="l_wrist_1_fixed_joint" type="fixed">
+    <origin xyz="0.04547212334915017 0.1655890223793864 -0.030229004065574397" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_wrist_1"/>
+  </joint>
+  <link name="l_hand"/>
+  <joint name="l_hand_fixed_joint" type="fixed">
+    <origin xyz="0.027938017812163745 0.16329101706262705 -0.031628925986897" rpy="0.0790794230156212 -0.052031613930206826 -0.27527862099575323"/>
+    <parent link="root_link"/>
+    <child link="l_hand"/>
+  </joint>
+  <link name="r_hip_3"/>
+  <joint name="r_hip_3_fixed_joint" type="fixed">
+    <origin xyz="0.036699999999999997 0 -0.08969999999999995" rpy="0 -0 0"/>
+    <parent link="r_hip_2"/>
+    <child link="r_hip_3"/>
+  </joint>
+  <link name="r_leg_ft_sensor"/>
+  <joint name="r_leg_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="0.036699999999999997 0 -0.08969999999999995" rpy="0 -0 0"/>
+    <parent link="r_hip_2"/>
+    <child link="r_leg_ft_sensor"/>
+  </joint>
+  <link name="r_foot_rear"/>
+  <joint name="r_foot_rear_fixed_joint" type="fixed">
+    <origin xyz="0.016 0 -0.06579999999999997" rpy="0 -0 0"/>
+    <parent link="r_ankle_2"/>
+    <child link="r_foot_rear"/>
+  </joint>
+  <link name="r_sole"/>
+  <joint name="r_sole_fixed_joint" type="fixed">
+    <origin xyz="0.07563 0 -0.06579999999999997" rpy="0 -0 0"/>
+    <parent link="r_ankle_2"/>
+    <child link="r_sole"/>
+  </joint>
+  <link name="r_foot_rear_ft_sensor"/>
+  <joint name="r_foot_rear_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="0.016 0 -0.06579999999999997" rpy="0 -0 0"/>
+    <parent link="r_ankle_2"/>
+    <child link="r_foot_rear_ft_sensor"/>
+  </joint>
+  <link name="r_foot_front"/>
+  <joint name="r_foot_front_fixed_joint" type="fixed">
+    <origin xyz="0.13525 0 -0.06579999999999997" rpy="0 -0 0"/>
+    <parent link="r_ankle_2"/>
+    <child link="r_foot_front"/>
+  </joint>
+  <link name="r_foot_front_ft_sensor"/>
+  <joint name="r_foot_front_ft_sensor_fixed_joint" type="fixed">
+    <origin xyz="0.13525 0 -0.06579999999999997" rpy="0 -0 0"/>
+    <parent link="r_ankle_2"/>
+    <child link="r_foot_front_ft_sensor"/>
+  </joint>
 </robot>

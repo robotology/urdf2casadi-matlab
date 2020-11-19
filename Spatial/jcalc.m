@@ -17,39 +17,44 @@ else
 end
 
 switch code
+    
   case 'fixed'				% actually for fixed joint S is 0 x 6 vector(see Featherstone)
     Xj = eye(6);
     S = [0;0;0;0;0;0];
-  case 'Rx'				% revolute X axis
-    Xj = rotx(q);
+    
+  case {'R','Rx','Ry','Rz'}			% revolute X axis
+    Rot = fromRotationAxisToRotationMatrix(-jointAxis,q);
+    Xj = plux( Rot, zeros(3,1) );
     S = [jointAxis(1);jointAxis(2);jointAxis(3);0;0;0];
-  case 'Ry'				% revolute Y axis
-    Xj = roty(q);
-    S = [jointAxis(1);jointAxis(2);jointAxis(3);0;0;0];
-  case {'R','Rz'}			% revolute Z axis
-    Xj = rotz(q);
-    S = [jointAxis(1);jointAxis(2);jointAxis(3);0;0;0];
+
   case 'Px'				% prismatic X axis
     Xj = xlt([q 0 0]);
-    S = [0;0;0;1;0;0];
+    S = [0;0;0;jointAxis(1);jointAxis(2);jointAxis(3)];
+    
   case 'Py'				% prismatic Y axis
     Xj = xlt([0 q 0]);
-    S = [0;0;0;0;1;0];
+    S = [0;0;0;jointAxis(1);jointAxis(2);jointAxis(3)];
+    
   case {'P','Pz'}			% prismatic Z axis
     Xj = xlt([0 0 q]);
-    S = [0;0;0;0;0;1];
+    S = [0;0;0;jointAxis(1);jointAxis(2);jointAxis(3)];
+    
   case 'H'				% helical (Z axis)
     Xj = rotz(q) * xlt([0 0 q*jtyp.pars.pitch]);
     S = [0;0;1;0;0;jtyp.pars.pitch];
+    
   case 'r'				% planar revolute
     Xj = plnr( q, [0 0] );
     S = [1;0;0];
+    
   case 'px'				% planar prismatic X axis
     Xj = plnr( 0, [q 0] );
     S = [0;1;0];
+    
   case 'py'				% planar prismatic Y axis
     Xj = plnr( 0, [0 q] );
     S = [0;0;1];
+    
   otherwise
     error( 'unrecognised joint code ''%s''', code );
 end
