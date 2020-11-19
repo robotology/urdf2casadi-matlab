@@ -23,6 +23,10 @@ switch code
     S = [0;0;0;0;0;0];
     
   case {'R','Rx','Ry','Rz'}			% revolute X axis
+    % According to the URDF convention the axis A is returned wrt the child
+    % link. This means that the parent link of the joint rotates of q wrt the child link frame around the axis A. but
+    % we need the inverse rotation: of the child wrt the parent around axis
+    % A of angle q. This can be done by considering the negative axis.
     Rot = fromRotationAxisToRotationMatrix(-jointAxis,q);
     Xj = plux( Rot, zeros(3,1) );
     S = [jointAxis(1);jointAxis(2);jointAxis(3);0;0;0];
