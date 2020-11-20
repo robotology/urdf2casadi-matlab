@@ -1,6 +1,6 @@
 # urdf2casadi-matlab
 The main purpose of this project is to generate symbolic represantions of the kinematics and dynamics of a robot
-by extracting its geometrical and physical parameters from its [URDF](http://wiki.ros.org/urdf) description.
+by extracting its geometrical and physical parameters from its [URDF](http://wiki.ros.org/urdf) description. It supports fixed-base, open-chain robots.
 It uses [CasADi](https://web.casadi.org/) to compute the symbolic expressions. It is inspired by 
 [urdf2eom](https://github.com/DeepakParamkusam/urdf2eom). 
 
@@ -19,3 +19,19 @@ Some usefull turorial can be found at https://github.com/robotology/idyntree#tut
 ## Usage 
 Get the [URDF](http://wiki.ros.org/urdf) of your robot. Then pick one of the functions to create and test the model against IDynTree 
 in the Verification/ subfolder. 
+
+## Available algorithms
+The algorithms generate both symbolic functions and their C code version (that is compiled as a *.mex file):
+* [Inverse Dynamics](Dynamics/symbolicInverseDynamics.m);
+* [Forward Dynamics](Dynamics/symbolicForwardDynamics.m);
+* Computation of the different elements of the Dynamics and Kinematics:
+  * [Mass matrix, its derivative and the Coriolis mastrix](Dynamics/createMassAndCoriolisMatrixFunction.m)
+  * [Gravity torques ](Dynamics/computeGravityTorque.m)
+  * [Jacobian and other usefull transforms](Dynamics/createSpatialTransformsFunction.m)
+* Computation of the [Dynamics of the robot in the form linear in the inertial parameters](Identification/computeSymbolicRegressor.m).
+   This can be used for identification computing the [stack of the Regressors](Identification/computeSymbolicStackOfRegressors.m). 
+   Also the [transposed](Identification/computeSymbolicStackOfRegressorsTransposed.m) of this last function is provided since it requires less computational time to compute the stack of regressor matrices. 
+
+ Additionally, the algorithms can be used to simulate a Momentum Observer for external force estimation, which can be tested by:
+ * running the script [testMomentumObserver.m](Verfication/functionForTests/testMomentumObserver.m) to prepare necessary functions and variables;
+ * running the Observer on Simulink using [momentumObserver.slx](Verfication/testOnSimulink);
