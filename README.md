@@ -30,7 +30,7 @@ The algorithms generate both symbolic functions and their C code version (that i
   * [Jacobian and other usefull transforms](Dynamics/createSpatialTransformsFunction.m)
 * Computation of the [Dynamics of the robot in the form linear in the inertial parameters](Identification/computeSymbolicRegressor.m).
    This can be used for identification computing the [stack of the Regressors](Identification/computeSymbolicStackOfRegressors.m). 
-   Also the [transposed](Identification/computeSymbolicStackOfRegressorsTransposed.m) of this last function is provided since it requires less computational time to compute the stack of regressor matrices. 
+   Also the [transposed](Identification/computeSymbolicStackOfRegressorsTransposed.m) of this last function is provided since it requires less computational time to compute the transposed of the stack of regressor matrices. 
 
  Additionally, the algorithms can be used to simulate a Momentum Observer for external force estimation, which can be tested by:
  * running the script [testMomentumObserver.m](Verfication/functionForTests/testMomentumObserver.m) to prepare necessary functions and variables;
