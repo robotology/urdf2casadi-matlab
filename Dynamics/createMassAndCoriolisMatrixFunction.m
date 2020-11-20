@@ -1,4 +1,4 @@
-function [HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,geneate_c_code,location_generated_fucntion)
+function [HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,generate_c_code,location_generated_fucntion)
 %Create a symbolic function returning the Mass and Coriolis matrices as a
 %function of joint position, velocity. In addition it also returns the
 %derivative of the mass matrix
@@ -28,7 +28,7 @@ CFunction = Function('computeCoriolisMatrix',{q,qd},{C},...
                     {'coriolisMatrix'});
                 
 %% Code generation option
-if geneate_c_code
+if generate_c_code
     current_folder = pwd;
     cd(location_generated_fucntion);
     % Create c code

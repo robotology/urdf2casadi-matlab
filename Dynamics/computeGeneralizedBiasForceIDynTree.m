@@ -31,7 +31,7 @@ f = iDynTree.FreeFloatingGeneralizedTorques();
 f.resize(mdlLoader.model());
 % Set BODY_FIXED_REPRESENTATION frame representation to use Featherstone's
 % notation. See https://robotology.github.io/idyntree/master/namespaceiDynTree.html#a0089c6dac34bc6a4f623d9e9e565375a
-kinDynComp.setFrameVelocityRepresentation(1);
+kinDynComp.setFrameVelocityRepresentation(iDynTree.BODY_FIXED_REPRESENTATION);
 kinDynComp.generalizedBiasForces(f);
 % Convert to  MATLAB matrix
 tau_IDyn = f.jointTorques();
