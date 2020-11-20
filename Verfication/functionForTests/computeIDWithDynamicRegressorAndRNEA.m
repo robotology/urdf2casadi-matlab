@@ -1,15 +1,8 @@
-function [tau_regressor, tau_RNEA] = computeIDWithDynamicRegressorAndRNEA(jointPos,jointVel,jointAcc, gravityModulus,robotModelURDF)
+function [tau_regressor, tau_RNEA] = computeIDWithDynamicRegressorAndRNEA(jointPos,jointVel,jointAcc, gravityModulus,robotModelURDF,location_generated_fucntion)
 
 %% Symbolic
 % Compute model from urdf
-% generate the c code only the first time
-persistent firstTime
-if isempty(firstTime)
-    firstTime = 1;
-else
-    firstTime = 0;
-end
-symbolicIDFunction = symbolicInverseDynamics(robotModelURDF,firstTime);
+symbolicIDFunction = symbolicInverseDynamics(robotModelURDF,0,location_generated_fucntion);
  % Gravity column vector
 g =[0;0;-gravityModulus];
 % The external forces is a vector of (6,1). It has to be one per
@@ -32,7 +25,7 @@ for i = 1:nrOfJoints
                            smds.I{i}(2,2); smds.I{i}(2,3); smds.I{i}(3,3)]; 
 end
 inertiaParameters = reshape(p,[],1);
-Y = inverseDynamicsInertialParametersRegressor(robotModelURDF,firstTime);
+Y = inverseDynamicsInertialParametersRegressor(robotModelURDF,0);
 tau_regressor = Y(jointPos, jointVel, jointAcc, g)*inertiaParameters;
 tau_regressor = full(tau_regressor);
 end

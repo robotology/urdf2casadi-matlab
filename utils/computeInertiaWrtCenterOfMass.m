@@ -7,7 +7,7 @@ function [I_oL, m, com ,rpy] = computeInertiaWrtCenterOfMass(model, jointIndex)
 
 % If a link does not have the inertial tag we'll set default values to zero
 if ~isfield(model.robot.link{jointIndex+1}, 'inertial')
-    warning('Setting inertial elements(center of mass,mass,Inertia Matix) to zero for link %d', jointIndex+1);
+    warning('Setting inertial elements(center of mass,mass,Inertia Matix) to zero for link %d', jointIndex);
     com = [0 0 0];
     m = 0;
     I = zeros(3);
@@ -39,7 +39,7 @@ else
     % Sanity check on Inertia: it must be at least positive semidefinite
     principalI = eig(I);
     if find(principalI<0)
-        warning('Inertial matrix body %d is not positive semi-definite', jointIndex+1);
+        warning('Inertial matrix body %d is not positive semi-definite', jointIndex);
     end
     % Get the orientation of the frame (G) wrt the Inertia is computed in the urdf
     % and the local body frame

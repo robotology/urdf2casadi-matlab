@@ -3,8 +3,8 @@ locationCasADi = '/home/iiticublap041/casadi-linux-matlabR2014b-v3.5.3';
 addpath(locationCasADi);
 % URDF for test
 kuka_urdf = '/home/iiticublap041/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
-twoLink_urdf = '/home/iiticublap041/baljinder/urdf2eom/URDFs/twoLinks.urdf';
-kuka_kr210 = '/home/iiticublap041/baljinder/urdf2eom/URDFs/kuka_kr210.urdf';
+twoLink_urdf = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/twoLinks.urdf';
+kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
 robotURDFModel = kuka_kr210;
 Y = inverseDynamicsInertialParametersRegressor(robotURDFModel,1);
 

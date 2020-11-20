@@ -19,7 +19,9 @@ if (strcmp(model.robot.joint{1,jointIndex}.Attributes.type,'continuous') || strc
     if  isfield(model.robot.joint{1,jointIndex}, 'axis')
         axis = str2num(model.robot.joint{1,jointIndex}.axis.Attributes.xyz);
     else
-        axis = [0 0 0];
+        warning('Axis field missing for joint %d', jointIndex);
+        % Default axis value according to http://wiki.ros.org/urdf/XML/joint
+        axis = [1 0 0];
     end
     if ((axis(1)~=0) && (axis(2)==0) && (axis(3)==0))
         type = 'Rx';
@@ -36,7 +38,8 @@ if (strcmp(model.robot.joint{1,jointIndex}.Attributes.type,'prismatic'))
     if  isfield(model.robot.joint{1,jointIndex}, 'axis')
         axis = str2num(model.robot.joint{1,jointIndex}.axis.Attributes.xyz);
     else
-        axis = [0 0 0];
+        % Default axis value according to http://wiki.ros.org/urdf/XML/joint
+        axis = [1 0 0];
     end
     if ((axis(1)~=0) && (axis(2)==0) && (axis(3)==0))
         type = 'Px';
