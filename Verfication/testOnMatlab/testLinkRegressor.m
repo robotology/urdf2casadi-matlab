@@ -1,5 +1,16 @@
-kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
-robotModelURDF= kuka_kr210;
+%% Test Newton-Euler low on a single link
+
+%% Fix location folder to store the generated c and .mex files
+location_tests_folder = pwd;
+
+%% Choose a urdf model
+kuka_urdf = [location_tests_folder,'/../../URDFs/kr30_ha-identified.urdf'];
+twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];
+kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
+iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
+
+%% Input urdf file to acquire robot structure
+robotModelURDF = iCub_r_leg;
 %Load urdf and convert to SMDS format
 smds = extractSystemModel(robotModelURDF);
 jointPos = [pi/6 0 0 0 0 0]';

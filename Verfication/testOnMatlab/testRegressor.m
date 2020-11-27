@@ -1,12 +1,19 @@
-%% Test the regressor
-locationCasADi = '/home/iiticublap041/casadi-linux-matlabR2014b-v3.5.3';
-addpath(locationCasADi);
-% URDF for test
-kuka_urdf = '/home/iiticublap041/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
-twoLink_urdf = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/twoLinks.urdf';
-kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
-robotURDFModel = kuka_kr210;
-Y = inverseDynamicsInertialParametersRegressor(robotURDFModel,1);
+% Test the regressor
+
+%% Choose a urdf model
+kuka_urdf = [location_tests_folder,'/../../URDFs/kr30_ha-identified.urdf'];
+twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];
+kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
+iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
+
+%% Input urdf file to acquire robot structure
+robotURDFModel = kuka_urdf;
+
+%% Generate functions
+% Fix location folder to store the generated c and .mex files
+location_tests_folder = pwd;
+location_generated_functions = [location_tests_folder,'/../../automaticallyGeneratedFunctions'];
+Y = inverseDynamicsInertialParametersRegressor(robotURDFModel,1,location_generated_functions);
 
 jointPos = [pi/6 0 0 0 0 0]';
 jointVel = rand(6,1);

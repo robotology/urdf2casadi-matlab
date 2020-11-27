@@ -1,21 +1,15 @@
 %% This is a script to compare the result of the symbolic expression with the result obtained using iDynTree(https://github.com/robotology/idyntree)
 
-% Clear workspace
-clear all;
-% Add casadi to Matlab path
-locationCasADi = '/home/iiticublap215/casadi-linux-matlabR2014b-v3.5.3';
-addpath(locationCasADi);
-location_generated_functions = '/home/iiticublap215/baljinder/urdf2casadi-matlab/automaticallyGeneratedFunctions';
-%% First compute ID with idyntree 
-kuka_urdf = '/home/iiticublap215/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
+% Fix location of the folder to store the generated c and .mex files
 location_tests_folder = pwd;
-twoLink_urdf = [location_tests_folder,'/../URDFs/twoLinks.urdf'];
-kuka_kr210 = [location_tests_folder,'/../URDFs/kuka_kr210.urdf'];
-iCub_r_leg = [location_tests_folder,'/../URDFs/iCub_r_leg.urdf'];
-handTaken_iCub_r_leg = [location_tests_folder,'/../URDFs/handTaken_iCub_r_leg.urdf'];
+location_generated_functions = [location_tests_folder,'/../../automaticallyGeneratedFunctions'];
+%% Choose a urdf model
+kuka_urdf = '/home/iiticublap215/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
+twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];
+kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
+iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
 
-location_generated_fucntion = [location_tests_folder,'/../automaticallyGeneratedFunctions'];
-%% input urdf file to acquire robot structure
+%% Input urdf file to acquire robot structure
 robotModelURDF = iCub_r_leg;
 
 %% Get number of joints using iDynTree
