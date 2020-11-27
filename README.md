@@ -17,7 +17,7 @@ Make sure to compile the [bindings to MATLAB](https://github.com/robotology/idyn
 Some usefull turorial can be found at https://github.com/robotology/idyntree#tutorials .
 
 ## Usage 
-Add to the [MATLAB path](https://it.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html) the repository and all its subfolders by launching `setPath.m`, make sure to insert the correct path to CasADi.Get the [URDF](http://wiki.ros.org/urdf) of your robot. Then pick one of the functions to create and test the model against IDynTree 
+Add to the [MATLAB path](https://mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html) the repository and all its subfolders by launching `setPath.m`, make sure to insert the correct path to CasADi.Get the [URDF](http://wiki.ros.org/urdf) of your robot. Then pick one of the functions to create and test the model against IDynTree 
 in the Verification/ subfolder. Each test* script should be launched from the folder it is contained in.
 
 ## Available algorithms
