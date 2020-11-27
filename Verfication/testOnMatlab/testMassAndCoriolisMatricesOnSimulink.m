@@ -1,16 +1,23 @@
 %% Test on Simulink Algorithm 1 from  "Numerical Methods to Compute the Coriolis Matrix and Christoffel Symbols for Rigid-Body System" 
 % by Sebastian Echeandia and Patrick M. Wensing
-%% First compute ID with idyntree 
-kuka_urdf = '/home/iiticublap041/idjl-model-identification/results/identification_results/kuka_kr30_ha/urdf/kr30_ha-identified.urdf';
-twoLink_urdf = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/twoLinks.urdf';
-kuka_kr210 = '/home/iiticublap041/baljinder/urdf2casadi-matlab/URDFs/kuka_kr210.urdf';
+
+%% Choose a urdf model
+location_tests_folder = pwd;
+kuka_urdf = [location_tests_folder,'/../../URDFs/kr30_ha-identified.urdf'];
+twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];
+kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
+iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
+
+%% Input urdf file to acquire robot structure
 robotURDFModel = kuka_kr210;
 
 %% Generate functions
-location_generated_fucntion = '/home/iiticublap041/baljinder/urdf2casadi-matlab/automaticallyGeneratedFunctions';
-[HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,1,location_generated_fucntion);
-symbolicIDFunction = symbolicInverseDynamics(robotURDFModel,1,location_generated_fucntion);
-[jacobian,X,XForce,S] = createSpatialTransformsFunction(robotURDFModel,1,location_generated_fucntion);
+% Fix location folder to store the generated c and .mex files
+location_generated_functions = [location_tests_folder,'/../../automaticallyGeneratedFunctions'];
+
+[HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,1,location_generated_functions);
+symbolicIDFunction = symbolicInverseDynamics(robotURDFModel,1,location_generated_functions);
+[jacobian,X,XForce,S] = createSpatialTransformsFunction(robotURDFModel,1,location_generated_functions);
 %% Create trajectories for simulation
 [smds,model] = extractSystemModel(robotURDFModel);
 nrOfJoints = smds.NB;

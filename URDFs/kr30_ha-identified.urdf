@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<robot name="iDynTreeURDFModelExportModelName">
+  <link name="base_link">
+    <inertial>
+      <mass value="81.49898541774294"/>
+      <origin xyz="-0.15588713550199712 3.6566073364249007e-6 0.4850651674687707" rpy="0 -0 0"/>
+      <inertia ixx="0.7718204725664606" ixy="-2.2322901610071454e-5" ixz="-2.949210347476722" iyy="2.214902969052357" iyz="6.817161174808872e-5" izz="12.718715949109445"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0 -0 -0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/base_link_0.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0 -0 -0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/base_link_0.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint_a1" type="continuous">
+    <origin xyz="0 0 0.815" rpy="0 -0 0"/>
+    <axis xyz="0 0 -1"/>
+    <parent link="base_link"/>
+    <child link="link_1"/>
+  </joint>
+  <link name="link_1">
+    <inertial>
+      <mass value="264.1099853144052"/>
+      <origin xyz="0.11592560363451758 0.004658600778828906 -0.09541718361712856" rpy="0 -0 0"/>
+      <inertia ixx="38.83311750621484" ixy="0.02016420395533819" ixz="-0.41300202413639653" iyy="23.920989645600194" iyz="-0.016596950897625848" izz="22.562480446344903"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_1_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_1_12.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_1_13.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_1_46.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_1_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_1_12.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_1_13.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0 -0 -0.815" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_1_46.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint_a2" type="continuous">
+    <origin xyz="0.35 0 0" rpy="0 -0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="link_1"/>
+    <child link="link_2"/>
+  </joint>
+  <link name="link_2">
+    <inertial>
+      <mass value="48.26876465276474"/>
+      <origin xyz="-0.8209343632225913 0.171969080683764 0.014234891667837892" rpy="0 -0 0"/>
+      <inertia ixx="15.904754743624078" ixy="-14.9594589506947" ixz="-17.85195563452684" iyy="107.46840639247918" iyz="-2.540156914561121" izz="57.63304247526847"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.815 -0 0.34999999999999987" rpy="0 1.5707963267948966 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_2_7.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.815 -0 0.34999999999999987" rpy="0 1.5707963267948966 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_2_7.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint_a3" type="continuous">
+    <origin xyz="0.85 0 0" rpy="0 -0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="link_2"/>
+    <child link="link_3"/>
+  </joint>
+  <link name="link_3">
+    <inertial>
+      <mass value="110.83555022353555"/>
+      <origin xyz="-0.5473673864009366 0.12113332231110002 -0.1640455383051401" rpy="0 -0 0"/>
+      <inertia ixx="4.843189940630014" ixy="-8.840134101452566" ixz="28.46823172867758" iyy="0.2202691275783053" iyz="-3.995333854192967" izz="-0.0028783481300393987"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_3_3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_3_5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_3_6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_3_8.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_3_3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_3_5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_3_6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.35 -0 -1.6649999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_3_8.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint_a4" type="continuous">
+    <origin xyz="0.82 0 0.145" rpy="0 -0 0"/>
+    <axis xyz="-1 0 0"/>
+    <parent link="link_3"/>
+    <child link="link_4"/>
+  </joint>
+  <link name="link_4">
+    <inertial>
+      <mass value="49.543690259398595"/>
+      <origin xyz="-0.8114888524550169 0.032626273713048146 -0.012764100975232574" rpy="0 -0 0"/>
+      <inertia ixx="2.465945404938889" ixy="-12.612432772990607" ixz="-17.21565694163985" iyy="-0.008320847052083025" iyz="2.7601178606735086" izz="3.1619005977331227"/>
+    </inertial>
+    <visual>
+      <origin xyz="-1.17 -0 -1.8099999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_4_53.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-1.17 -0 -1.8099999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_4_53.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint_a5" type="continuous">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="link_4"/>
+    <child link="link_5"/>
+  </joint>
+  <link name="link_5">
+    <inertial>
+      <mass value="38.062368591319505"/>
+      <origin xyz="0.08413122576205084 0.13489435397415106 -0.13974441717195651" rpy="0 -0 0"/>
+      <inertia ixx="13.162421904249301" ixy="38.1480932210614" ixz="0.14826360360876478" iyy="-9.659030995761153e-4" iyz="15.184387365236049" izz="32.12381441377052"/>
+    </inertial>
+    <visual>
+      <origin xyz="-1.17 -0 -1.8099999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_5_48.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-1.17 -0 -1.8099999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_5_48.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint_a6" type="continuous">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <axis xyz="-1 0 0"/>
+    <parent link="link_5"/>
+    <child link="link_6"/>
+  </joint>
+  <link name="link_6">
+    <inertial>
+      <mass value="72.68065588051005"/>
+      <origin xyz="0.0389542242474203 0.014770526010256083 -0.5110381592223185" rpy="0 -0 0"/>
+      <inertia ixx="-0.0026749122608293874" ixy="-3.3833679231157396" ixz="-8.34436594664745" iyy="-0.00280265610291508" iyz="6.73525486302304" izz="-1.3281029292772084e-4"/>
+    </inertial>
+    <visual>
+      <origin xyz="-1.17 -0 -1.8099999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/visual/link_6_47.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-1.17 -0 -1.8099999999999998" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="robot_models/kuka_kr30_ha/meshes/kr30_ha/collision/link_6_47.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="tool0"/>
+  <joint name="tool0_fixed_joint" type="fixed">
+    <origin xyz="0.17 0 0" rpy="0 1.5707963267948966 0"/>
+    <parent link="link_6"/>
+    <child link="tool0"/>
+  </joint>
+</robot>
