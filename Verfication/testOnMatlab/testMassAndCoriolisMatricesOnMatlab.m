@@ -48,6 +48,9 @@ for i= 1:nrOfTests
     HDot = cell2mat_casadi(HDot_cell);
     C = cell2mat_casadi(C_cell);
     
+    % Use CRBA and NE
+    [H_CRBA,C_CRBA] = HandC( smds, jointPos,jointVel, g );
+    
     %% Compute gravity torques using the symbolic Inverse Dynamics function
     tau_gravity = full(computeGravityTorque(jointPos,g,symbolicIDFunction));
 
@@ -66,3 +69,4 @@ for i= 1:nrOfTests
     e_genBias(:,i) = abs(generalizedBias-genealizedBias_IDyn);
 end
 plot(e_normMass');title('Mass matrix error norm: norm(M_{symb} - M_{IDyn})');legend;   
+plot(e_genBias');title('Generalized bias error norm: norm(generalizedBias_{symb} - generalizedBias_{IDyn})');legend;   
