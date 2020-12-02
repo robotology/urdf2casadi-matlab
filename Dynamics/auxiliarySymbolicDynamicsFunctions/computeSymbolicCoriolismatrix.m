@@ -18,7 +18,7 @@ for i=1:smds.NB
     % S should also be added
     SDot{i} = crm(v{i})*S{i}; %+ringS{i};
     IC{i}   = smds.I{i};
-    BC{i}   = 0.5*(crf(v{i})*smds.I{i} + crf(smds.I{i}*v{i}) - smds.I{i}*crm(v{i}));
+    BC{i}   = 0.5*(crf(v{i})*smds.I{i} + icrf(smds.I{i}*v{i}) - smds.I{i}*crm(v{i}));
 end
 for j = smds.NB:-1:1
     F1 = IC{j}*SDot{j} + BC{j}*S{j};
