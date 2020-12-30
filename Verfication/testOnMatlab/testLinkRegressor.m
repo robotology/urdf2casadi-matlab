@@ -1,4 +1,4 @@
-%% Test Newton-Euler low on a single link
+%% Test Newton-Euler law on a single link
 
 %% Fix location folder to store the generated c and .mex files
 location_tests_folder = pwd;
