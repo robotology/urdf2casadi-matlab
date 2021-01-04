@@ -1,6 +1,5 @@
 %Compute the reduced model urdf model(without sensors)
 location_current_folder = pwd;
-iCub09_right_leg = [location_current_folder,'/../../../URDFs/iCub_r_leg.urdf'];
 iCub09 = [location_current_folder,'/../../../URDFs/iCubGenova9.urdf'];
 %% input urdf file to acquire robot structure
 robotModelURDF = iCub09;
