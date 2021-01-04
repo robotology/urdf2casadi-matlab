@@ -1,5 +1,6 @@
 % Test the regressor
 
+location_tests_folder = pwd;
 %% Choose a urdf model
 kuka_urdf = [location_tests_folder,'/../../URDFs/kr30_ha-identified.urdf'];
 twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];

@@ -14,7 +14,20 @@ location_generated_functions = [location_tests_folder,'/../../automaticallyGener
 
 [HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,1,location_generated_functions);
 symbolicIDFunction = symbolicInverseDynamics(robotURDFModel,1,location_generated_functions);
-[jacobian,X,XForce,S,O_X_ee] = createSpatialTransformsFunction(robotURDFModel,1,location_generated_functions);
+opts.geneate_c_code = true;
+opts.location_generated_fucntion = location_generated_functions;
+opts.FrameVelocityRepresentation = "MIXED_REPRESENTATION";
+[jacobian,X,XForce,S,O_X_ee] = createSpatialTransformsFunction(robotURDFModel,opts);
+
+% IDynTree model loader
+mdlLoader = iDynTree.ModelCalibrationHelper();
+mdlLoader.loadModelFromFile(robotURDFModel);
+kinDynComp = iDynTree.KinDynComputations();
+kinDynComp.loadRobotModel(mdlLoader.model());
+base_frame = 0;
+ee_frame = 7;
+% Relative Jacobian of end-effector frame wrt base frame
+J_idyn = iDynTree.MatrixDynSize();
 
 %% Create trajectories for simulation
 [smds,model] = extractSystemModel(robotURDFModel);
@@ -28,7 +41,7 @@ qdd = efe.dataset.jointAcc;
 
 tau = efe.measuredJointTorques_list' - efe.estimatedFrictionTorques_list';
 
-gravityModulus = 0;
+gravityModulus = 9.81;
 g = [0;0;-gravityModulus];
 
 nrOfSamples = max(size(q));
@@ -70,10 +83,14 @@ if simulink_finished
     observerEstimation  = expsmooth( out.observerEstimatedForce.Data, 1/sampling_period , 1000 );
     subplot(2,1,1);
     plot(IDEstimation);title('Inverse dynamics estimation');
+    grid on;
     legend('force x','force y','force z', 'tau x', 'tau y', 'tau z');
+    ylim([-200, 150])
     subplot(2,1,2);
-    plot(observerEstimation);title('Observer based estimation');
-    legend('force x','force y','force z', 'tau x', 'tau y', 'tau z');
+    plot(out.tout,observerEstimation);title('Observer based estimation');
+    grid on;
+    legend( 'tau x', 'tau y', 'tau z','force x','force y','force z');
+    ylim([-200, 150])
 end
 
 
