@@ -14,11 +14,11 @@ robotURDFModel = kuka_urdf;
 % Fix location folder to store the generated c and .mex files
 location_tests_folder = pwd;
 location_generated_functions = [location_tests_folder,'/../../automaticallyGeneratedFunctions'];
-nrOfTrajectoryPoints = 10;
-Y = computeSymbolicStackOfFrictionRegressorsTransposed (robotURDFModel,nrOfTrajectoryPoints,...
+nrOfTrajectoryPoints = 100;
+F = computeSymbolicStackOfFrictionRegressorsTransposed (robotURDFModel,nrOfTrajectoryPoints,...
                              0,location_generated_functions);
 jointPos = rand(6,nrOfTrajectoryPoints);
 K_v = rand(6,1);
 delta = rand(6,1);
 
-Y_symb = Y(jointPos,K_v,delta);
+F_num = full(F(jointPos,K_v,delta)');
