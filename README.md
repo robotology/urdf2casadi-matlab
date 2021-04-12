@@ -26,12 +26,12 @@ The algorithms generate both symbolic functions and their C code version (that i
 * [Forward Dynamics](Dynamics/symbolicForwardDynamics.m);
 * Computation of the different elements of the Dynamics and Kinematics:
   * [Mass matrix, its derivative and the Coriolis mastrix](Dynamics/createMassAndCoriolisMatrixFunction.m)
-  * [Gravity torques ](Dynamics/computeGravityTorque.m)
-  * [Jacobian and other usefull transforms](Dynamics/createSpatialTransformsFunction.m)
-* Computation of the [Dynamics of the robot in the form linear in the inertial parameters](Identification/computeSymbolicRegressor.m).
+  * [Gravity torques ](Dynamics/auxiliarySymbolicDynamicsFunctions/computeGravityTorque.m)
+  * [Jacobian and other usefull transforms](Dynamics/auxiliarySymbolicDynamicsFunctions/createSpatialTransformsFunction.m)
+* Computation of the [Dynamics of the robot in the form linear in the inertial parameters](Identification/auxiliarySymbolicDynamicsFunctions/computeSymbolicRegressor.m).
    This can be used for identification computing the [stack of the Regressors](Identification/computeSymbolicStackOfRegressors.m). 
    Also the [transposed](Identification/computeSymbolicStackOfRegressorsTransposed.m) of this last function is provided since it requires less computational time to compute the transposed of the stack of regressor matrices. 
 
  Additionally, the algorithms can be used to simulate a Momentum Observer for external force estimation, which can be tested by:
- * running the script [testMomentumObserver.m](Verfication/functionForTests/testMomentumObserver.m) to prepare necessary functions and variables;
+ * running the script [testMomentumObserver.m](Verfication/testOnMatlab/testMomentumObserver.m) to prepare necessary functions and variables;
  * running the Observer on Simulink using [momentumObserver.slx](Verfication/testOnSimulink);
