@@ -31,7 +31,7 @@ for i = 1:smds.NB
     X{i}{1,i} = eye(6);
     XForce{i}{1,i} = eye(6);
     for j = i+1:smds.NB
-        X{i}{1,j} = eye(smds.NB);
+        X{i}{1,j} = eye(6);
         for k = i+1:j
             X{i}{1,j} = Xup{k}*X{i}{1,j};
         end
