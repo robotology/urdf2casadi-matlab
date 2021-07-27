@@ -1,4 +1,11 @@
 function A = computeLinkRegressor(linkSpatialVel, linkSpatialAcc)
+% Compute the regressor associated with a single link. The regressor is the
+% matrix that renders the dynamics Newton-Euler equation linear in the
+% inertia parameters
+
+% Import necessary functions
+import urdf2casadi.Identification.auxiliarySymbolicDynamicsFunctions.computeRotationalMomentumRegressor
+import urdf2casadi.Utils.Spatial.skew
 
 % Link angular vel
 linkAngularVel = linkSpatialVel(1:3);

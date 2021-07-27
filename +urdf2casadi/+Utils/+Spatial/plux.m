@@ -11,6 +11,9 @@ function  [o1,o2] = plux( i1, i2 )
 % the same transform as rotx(1)*xlt([2 3 4]).  If two arguments are
 % supplied then they are assumed to be E and r, otherwise X.
 
+% Import skew function
+import urdf2casadi.Utils.Spatial.skew
+
 if nargin == 2				% E,r --> X
 
   o1 = [ i1, zeros(3); -i1*skew(i2), i1 ];

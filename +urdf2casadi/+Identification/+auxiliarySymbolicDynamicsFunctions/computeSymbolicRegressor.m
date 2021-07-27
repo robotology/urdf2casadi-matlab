@@ -1,7 +1,12 @@
 function regressor = computeSymbolicRegressor(q, qd, qdd, g, smds, opts)
 %Compute and return the dynamics regressor of the dynamics linear in the
 %inertial parameters. 
-% Additional options can be provided with `opts` argument. If o
+% Additional options can be provided with `opts` argument. 
+
+% Import necessary functions
+import urdf2casadi.Utils.computeKinematics
+import urdf2casadi.Identification.auxiliarySymbolicDynamicsFunctions.computeLinkRegressor
+
 % Compute frame transformations, joint motion subspace matrix, link velocity and accelerations
 [X,XForce,S,Xup, v, a] = computeKinematics(smds, q, qd, qdd, g);
 

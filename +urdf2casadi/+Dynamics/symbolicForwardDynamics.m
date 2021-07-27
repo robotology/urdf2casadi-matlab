@@ -3,6 +3,13 @@ function [forwardDynamicsFunction] = symbolicForwardDynamics(file,geneate_c_code
 %Based on articulated body forward dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
+% Import necessary functions 
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Utils.Spatial.jcalc
+import urdf2casadi.Utils.Spatial.crf
+import urdf2casadi.Utils.Spatial.crm
+import urdf2casadi.Utils.Spatial.apply_external_forces
+
 %Load urdf and convert to SMDS format
 smds = extractSystemModel(file);
 import casadi.*;

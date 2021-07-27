@@ -14,6 +14,9 @@ function  out = pluho( in )
 %   X = [  E   0 ]   T = [ E  -Er ]
 %       [ -Erx E ]       [ 0   1  ]
 
+% Import skew function
+import urdf2casadi.Utils.Spatial.skew
+
 if all(size(in)==[6 6])			% Plucker -> 4x4 homogeneous
   E = in(1:3,1:3);
   mErx = in(4:6,1:3);			% - E r cross

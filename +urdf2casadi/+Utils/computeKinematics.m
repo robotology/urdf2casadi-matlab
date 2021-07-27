@@ -10,6 +10,10 @@ function [X,XForce,S,Xup, v, a] = computeKinematics (smds, q, qd, qdd, g)
 %  *force coordinate transform from body i to its predecessor(XForce{i})
 %  *Joint motion subspace matrix S (referred as K in Springer Handbook of Robotics(2016) in Chapter 6.3)
 
+% Import necessary functions 
+import urdf2casadi.Utils.Spatial.jcalc
+import urdf2casadi.Utils.Spatial.crm
+
 %Gravity
 a_grav = [0;0;0;g(1);g(2);g(3)];
 

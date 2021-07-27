@@ -52,8 +52,8 @@ else
 end
 % Compute the Inertia matrix wrt a frame centered in the center of mass(g) but
 % alligned with body local frame (L) orientation 
-I_gL = changeReferenceFrameInertiaMatrix(I, [],rpy,[], 'rpy');
+I_gL = urdf2casadi.Utils.modelExtractionFunctions.changeReferenceFrameInertiaMatrix(I, [],rpy,[], 'rpy');
 % Compute Inertia matrix wrt frame centered in the local frame origin (o) and
 % with orintation of the local body frame (L)
-I_oL = mcI(m, com, I_gL);   
+I_oL = urdf2casadi.Utils.Spatial.mcI(m, com, I_gL);   
 end

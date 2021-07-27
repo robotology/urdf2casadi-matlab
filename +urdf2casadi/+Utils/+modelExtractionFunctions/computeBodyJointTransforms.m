@@ -5,6 +5,9 @@ function X_Ti = computeBodyJointTransforms(model,jointIndex)
 % Look at the RBDL implementation for comparison:
 % https://github.com/rbdl/rbdl/blob/bf42f2552bbb6c872bc275a608762b0f91aa2dd3/addons/urdfreader/urdfreader.cc#L215
 
+% Import spatial functions 
+import urdf2casadi.Utils.Spatial.*
+
 if isfield(model.robot.joint{1,jointIndex}.origin.Attributes,'xyz')
     t = str2num(model.robot.joint{1,jointIndex}.origin.Attributes.xyz);
 else

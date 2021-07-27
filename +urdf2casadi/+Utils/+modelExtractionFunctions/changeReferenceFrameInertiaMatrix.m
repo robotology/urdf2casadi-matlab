@@ -1,6 +1,8 @@
 function output = changeReferenceFrameInertiaMatrix(I_gG, t_og,rot_GL,mass, rotation_convention)
 %Function to compute inertia transfom from a frame G (centered at the center of mass g) to a frame L (centered in the body lical frame origin
 % point o) given a translation from g to o of t_og and a rotation from L to G of rot_LG  
+% Import skew function
+import urdf2casadi.Utils.Spatial.skew
 
 if (size(I_gG,2) == 6)
     if strcmp(rotation_convention,'rpy')
@@ -21,7 +23,6 @@ if (size(I_gG,2) == 6)
 
         G_R_L = R_y*R_p*R_r;
         L_R_G = G_R_L';
-    %     A_R_B = R_r*R_p*R_y;
     end
     % Inertia matrix wrt orientation of frame A centered in point g
     I_gA = L_R_G*I_gG*L_R_G.';
@@ -49,7 +50,6 @@ if (size(I_gG,2) == 3)
         % repoted in the udf
         G_R_L = R_y*R_p*R_r;
         L_R_G = G_R_L';
-        % A_R_B = R_r*R_p*R_y;
     end
     % Inertia matrix wrt orientation of frame A centered in point g
     output = L_R_G*I_gG*L_R_G.';

@@ -4,6 +4,10 @@ function symbolicRegressorFunction = inverseDynamicsInertialParametersRegressor(
 % See Springer Handbook of Robotics(2016) in Chapter 6.3 for more details
 % on the computations
 
+% Import necessary functions 
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Identification.auxiliarySymbolicDynamicsFunctions.computeSymbolicRegressor
+
 %Load urdf and convert to SMDS format
 smds = extractSystemModel(robotURDFModel);
 %Initialize variables
