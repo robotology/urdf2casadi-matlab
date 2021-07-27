@@ -9,6 +9,12 @@ twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];
 kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
 iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
 
+%% Import necesary functions
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Utils.computeKinematics
+import urdf2casadi.Identification.auxiliarySymbolicDynamicsFunctions.computeLinkRegressor
+import urdf2casadi.Utils.Spatial.crf
+
 %% Input urdf file to acquire robot structure
 robotModelURDF = iCub_r_leg;
 %Load urdf and convert to SMDS format

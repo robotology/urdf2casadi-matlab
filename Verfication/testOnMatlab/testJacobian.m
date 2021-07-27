@@ -14,7 +14,7 @@ location_generated_functions = [location_tests_folder,'/../../automaticallyGener
 opts.geneate_c_code = true;
 opts.location_generated_fucntion = location_generated_functions;
 opts.FrameVelocityRepresentation = "MIXED_REPRESENTATION";
-[J_symb,X,XForce,S,O_X_ee] = createSpatialTransformsFunction(robotURDFModel,opts);
+[J_symb,X,XForce,S,O_X_ee] = urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.createSpatialTransformsFunction(robotURDFModel,opts);
 
 % IDynTree variables
 mdlLoader = iDynTree.ModelCalibrationHelper();

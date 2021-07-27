@@ -4,6 +4,12 @@ function [H,HDot,C] =computeSymbolicCoriolismatrix(q,qd,qdd,smds)
 % "Numerical Methods to Compute the Coriolis Matrix and Christoffel Symbols
 % for Rigid-Body System" by Sebastian Echeandia and Patrick M. Wensing
 
+% Import necessary functions
+import urdf2casadi.Utils.computeKinematics
+import urdf2casadi.Utils.Spatial.icrf
+import urdf2casadi.Utils.Spatial.crm
+import urdf2casadi.Utils.Spatial.crf
+
 % the gravity is not influencing the quantities we need
 g = [0;0;0];
 [~,~,S,Xup, v, ~] = computeKinematics (smds, q, qd, qdd, g);

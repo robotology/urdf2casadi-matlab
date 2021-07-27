@@ -12,6 +12,12 @@ function  [H,C] = HandC( model, q, qd, g, f_ext )
 % external forces.  The format of f_ext is explained in the source code of
 % apply_external_forces.
 
+% Import necessary functions
+import urdf2casadi.Utils.Spatial.jcalc
+import urdf2casadi.Utils.Spatial.crm
+import urdf2casadi.Utils.Spatial.crf
+import urdf2casadi.Utils.Spatial.apply_external_forces
+
 a_grav = [0;0;0;g(1);g(2);g(3)];
 
 for i = 1:model.NB
