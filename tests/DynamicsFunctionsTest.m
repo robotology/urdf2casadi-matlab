@@ -53,30 +53,31 @@ classdef DynamicsFunctionsTest < matlab.unittest.TestCase
     
     methods(Test)
         function testInverseDynamics(testCase)
-           
+            % Test the Inverse dynamics
+            
             % For each test URDF compute the Inverse Dynamics using urdf2casadi-matlab and iDynTree, then compare the results
             for r=1:length(testCase.testURDFfiles)
-                
+
                 robotModelURDF = testCase.testURDFfiles{r};
-                
+
                 % Load iDynTree model
                 testCase.mdlLoader.loadModelFromFile(robotModelURDF);
                 testCase.kinDynComp.loadRobotModel(testCase.mdlLoader.model());
-                
+
                 nrOfJoints = testCase.kinDynComp.model().getNrOfDOFs();
-                
+
                 % Compute the symbolic model
                 symbolicDynamicFunction = urdf2casadi.Dynamics.symbolicInverseDynamics(robotModelURDF, false, testCase.location_generated_functions);
-                
+
                 % The external forces is a vector of (6,1). It has to be one per
                 % link, expect the base link(which for now is considered fixed)
                 extForce = zeros(6,nrOfJoints);
                 g = [0, 0, -testCase.gravityModulus]';
-                
+
                 % Prepare variables to store results
                 iDynResult_list = zeros(nrOfJoints, testCase.nrOfTests);
                 symbolcResult_list = zeros(nrOfJoints, testCase.nrOfTests);
-                
+
                 % For each test compute a random pose
                 for ii = 1 : testCase.nrOfTests
                     jointPos = rand(nrOfJoints,1);
@@ -95,6 +96,7 @@ classdef DynamicsFunctionsTest < matlab.unittest.TestCase
         end
         
         function testForwardDynamics(testCase)
+            % Test the forward dynamics
             
             % For each test URDF compute the Inverse Dynamics using urdf2casadi-matlab and iDynTree, then compare the results
             for r=1:length(testCase.testURDFfiles)
@@ -126,6 +128,7 @@ classdef DynamicsFunctionsTest < matlab.unittest.TestCase
         end
         
         function testInverseDynamicsInertiaParametersRegressor(testCase)
+            % Test the inverse dynamics Inertia Parameter regressor
             
             % For each test URDF compute the Inverse Dynamics using urdf2casadi-matlab and iDynTree, then compare the results
             for r=1:length(testCase.testURDFfiles)
@@ -175,6 +178,86 @@ classdef DynamicsFunctionsTest < matlab.unittest.TestCase
                 assertLessThanOrEqual(testCase, abs(tau_RNEA_list'-tau_regressor_list'),  testCase.tol);
             end
             
+        end
+        
+        function testMassAndCoriolisMatrices(testCase)
+            % Test the Mass and the Coriolis matrices
+
+            %% Import necesary functions
+            import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+            import urdf2casadi.Dynamics.symbolicInverseDynamics
+            import urdf2casadi.Utils.iDynTreeDynamicsFunctions.computeMassMatrixIDynTree
+            import urdf2casadi.Utils.iDynTreeDynamicsFunctions.computeGravityTorqueIDynTree
+            import urdf2casadi.Utils.iDynTreeDynamicsFunctions.computeGeneralizedBiasForceIDynTree
+            import urdf2casadi.Dynamics.HandC
+            import urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.computeSymbolicCoriolismatrix
+            import urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.computeGravityTorque
+            import urdf2casadi.Utils.auxiliaryFunctions.cell2mat_casadi
+            
+            for r = 1 : length(testCase.testURDFfiles)
+               
+                robotURDFModel = testCase.testURDFfiles{r};
+                
+                % Inverse dynamics symbolic function
+                symbolicIDFunction = symbolicInverseDynamics(robotURDFModel, false, testCase.location_generated_functions);
+
+                % Compute mass matrix, its derivative and Coriolis matrix with an efficient algorithm
+                smds = extractSystemModel(robotURDFModel);
+                nrOfJoints = smds.NB;
+
+                g = [0;0;-testCase.gravityModulus];
+
+                % Prepare variables to store results
+                e_massMatrix = zeros(nrOfJoints,nrOfJoints, testCase.nrOfTests);
+                e_gravity    = zeros(nrOfJoints, testCase.nrOfTests);
+                e_torqueID   = zeros(nrOfJoints, testCase.nrOfTests);
+                e_genBias    = zeros(nrOfJoints, testCase.nrOfTests);
+                
+                for ii = 1 : testCase.nrOfTests
+                    %% Random points
+                    jointPos = rand(nrOfJoints,1);
+                    jointVel = rand(nrOfJoints,1);
+                    jointAcc = rand(nrOfJoints,1);
+
+                    %% IDynTree values 
+                    % Compute mass matrix with IDynTree
+                    M_IDyn = computeMassMatrixIDynTree(robotURDFModel, jointPos, jointVel, jointAcc, testCase.gravityModulus);
+                    % Compute gravity torques IDynTree
+                    tau_gravity_IDyn = computeGravityTorqueIDynTree(robotURDFModel, jointPos, testCase.gravityModulus);
+                    % Compute the generalized bias force C(q,qd)*qd + g(q)
+                    genealizedBias_IDyn = computeGeneralizedBiasForceIDynTree(robotURDFModel, jointPos, jointVel, testCase.gravityModulus);
+
+                    %% Symbolic Matrices
+                    [H_cell,HDot_cell,C_cell] = computeSymbolicCoriolismatrix(jointPos, jointVel, jointAcc, smds);
+                    H = cell2mat_casadi(H_cell);
+                    C = cell2mat_casadi(C_cell);
+
+                    % Use CRBA and NE
+                    [H_CRBA,C_CRBA] = HandC( smds, jointPos,jointVel, g );
+
+                    %% Compute gravity torques using the symbolic Inverse Dynamics function
+                    tau_gravity = full(computeGravityTorque(jointPos, g, symbolicIDFunction));
+
+                    %% Compare generalized bias forces
+                    generalizedBias = C*jointVel + tau_gravity;
+
+                    %% Compute the inverse dynamics with the matrices  
+                    tau_efficient = H*jointAcc + C*jointVel + tau_gravity;
+                    tau_ID = full(symbolicIDFunction(jointPos,jointVel,jointAcc,g,0));
+
+                    %% Compare iDynTee and symbolic 
+                    e_massMatrix(:,:,ii) = abs(H - M_IDyn);
+                    e_gravity(:,ii) = abs(tau_gravity - tau_gravity_IDyn);
+                    e_torqueID(:,ii) = abs(tau_efficient-tau_ID);
+                    e_genBias(:,ii) = abs(generalizedBias-genealizedBias_IDyn);
+                end
+                
+                assertLessThanOrEqual(testCase, e_massMatrix,  testCase.tol);
+                assertLessThanOrEqual(testCase, e_gravity,  testCase.tol);
+                assertLessThanOrEqual(testCase, e_torqueID,  testCase.tol);
+                assertLessThanOrEqual(testCase, e_genBias,  testCase.tol);
+            
+            end
         end
     end
 end
