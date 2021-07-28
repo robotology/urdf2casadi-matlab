@@ -5,6 +5,13 @@ twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];
 kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
 iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
 
+% Import necessary functions 
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Dynamics.createMassAndCoriolisMatrixFunction
+import urdf2casadi.Dynamics.symbolicInverseDynamics
+import urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.createSpatialTransformsFunction
+import urdf2casadi.Utils.auxiliaryFunctions.plot_trajectories
+
 %% Input urdf file to acquire robot structure
 robotURDFModel = kuka_urdf;
 

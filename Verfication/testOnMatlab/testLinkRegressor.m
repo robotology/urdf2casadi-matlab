@@ -44,4 +44,7 @@ for l = 1:smds.NB
     f_NE = smds.I{l}*a{l} + crf(v{l})*smds.I{l}*v{l};   
 end
 
-
+% Check if the Newton-Euler and regressor based dynamics equations give the
+% same result
+tol = 1e-10;
+assert(all(f_regressor - f_NE < tol));

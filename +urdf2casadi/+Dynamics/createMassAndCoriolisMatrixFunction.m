@@ -3,6 +3,11 @@ function [HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction
 %function of joint position, velocity. In addition it also returns the
 %derivative of the mass matrix
 
+% Import necessary functions 
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.computeSymbolicCoriolismatrix
+import urdf2casadi.Utils.auxiliaryFunctions.cell2mat_casadi
+
 % Extract the robot model
 smds = extractSystemModel(robotURDFModel);
 
