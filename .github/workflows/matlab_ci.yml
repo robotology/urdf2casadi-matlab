@@ -1,0 +1,86 @@
+name: MATLAB tests
+
+on:
+  push:
+    branches:
+            - master
+            - matlab-github-ci
+  pull_request:
+    branches:
+            - master
+
+
+jobs:
+
+  run-matlab-test:
+
+    name: Install dependencies and run MATLAB tests
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
+    env:
+        CONDA_ENV_NAME: urdf2casadi
+    
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Install miniforge
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniforge-version: latest
+          activate-environment: ${GITHUB_WORKSPACE}/${{env.CONDA_ENV_NAME}}
+
+      - name: Install casadi, casadi-matlab-bindings and idyntree-matlab-bindings
+        run: conda install -c conda-forge -c robotology casadi casadi-matlab-bindings idyntree-matlab-bindings
+
+      - name: conda info
+        run: |
+          conda info
+          conda list
+          conda config --show-sources
+          conda config --show
+
+      - name: Set configuration enviromental variables  [Ubuntu]
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          echo "URDF2CASADI_PACKAGE_PATH=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
+          echo "URDF2CASADI_TEST_FOLDER=${GITHUB_WORKSPACE}/tests" >> $GITHUB_ENV
+          echo "CONDA_ENV_LOCATION=${GITHUB_WORKSPACE}/${{env.CONDA_ENV_NAME}}" >> $GITHUB_ENV
+          echo "IDYNTREE_AND_CASADI_MATLAB_BINDINGS_PATH=${GITHUB_WORKSPACE}/${{env.CONDA_ENV_NAME}}/mex" >> $GITHUB_ENV
+
+
+      - name: Install MATLAB
+        uses: matlab-actions/setup-matlab@v0
+        with:
+          release: R2020b
+
+      - name: Check the path variables
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          # Print the current directory and the other env variables
+          echo "$(pwd)"
+          echo $GITHUB_WORKSPACE
+          echo "$(ls)"  
+          echo $CASADI_BINDINGS_PATH
+          echo $URDF2CASADI_PACKAGE_PATH
+          echo $URDF2CASADI_TEST_FOLDER
+          
+          cd $CONDA_PKGS_DIR 
+          ls
+          echo $CONDA_ENV_LOCATION
+          cd $CONDA_ENV_LOCATION
+          ls
+          cd
+
+      - name: Run MATLAB tests
+        uses: matlab-actions/run-command@v1
+        with:
+          command: addpath( getenv('IDYNTREE_AND_CASADI_MATLAB_BINDINGS_PATH') ); addpath(getenv('URDF2CASADI_PACKAGE_PATH')); cd(getenv('URDF2CASADI_TEST_FOLDER')); result = runtests; assertSuccess(result);
