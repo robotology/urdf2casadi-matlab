@@ -10,6 +10,12 @@ function  [Xj,S] = jcalc(jointAxis, jtyp, q )
 % more parameters.  (For a helical joint, pars contains a parameter called
 % 'pitch'.)  q is the joint's position variable.
 
+% Import auxiliary functions 
+import urdf2casadi.Utils.modelExtractionFunctions.fromRotationAxisToRotationMatrix
+import urdf2casadi.Utils.Spatial.xlt
+import urdf2casadi.Utils.Spatial.plux
+import urdf2casadi.Utils.Spatial.rotz
+
 if ischar( jtyp )
   code = jtyp;
 else

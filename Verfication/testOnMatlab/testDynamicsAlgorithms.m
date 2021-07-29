@@ -10,7 +10,7 @@ kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
 iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
 
 %% Input urdf file to acquire robot structure
-robotModelURDF = iCub_r_leg;
+robotModelURDF = kuka_kr210;
 
 %% Get number of joints using iDynTree
 mdlLoader = iDynTree.ModelLoader();
@@ -31,13 +31,13 @@ tau_regressor_list = zeros(nrOfJoints,nrOfTests);
 tau_RNEA_list = zeros(nrOfJoints,nrOfTests);
 gravityModulus = 9.80665;
 
-id = true;
+id = false;
 fd = false;
-dynamicRegressor = false;
+dynamicRegressor = true;
 
 if id
     %% Compute the symbolic model
-    symbolicDynamicFunction = symbolicInverseDynamics(robotModelURDF,0, location_generated_functions);
+    symbolicDynamicFunction = urdf2casadi.Dynamics.symbolicInverseDynamics(robotModelURDF,0, location_generated_functions);
     % The external forces is a vector of (6,1). It has to be one per
     % link, expect the base link(which for now is considered fixed)
     extForce = zeros(6,nrOfJoints);
@@ -50,7 +50,7 @@ if id
         tau_symbolic_function = symbolicDynamicFunction(jointPos, jointVel, jointAcc, g,extForce);
         tau_symbolic_function = full(tau_symbolic_function);
         
-        iDynResult_list(:,i) = computeInverseDynamicsIDynTree(robotModelURDF,jointPos',jointVel',jointAcc',gravityModulus);
+        iDynResult_list(:,i) = urdf2casadi.Utils.iDynTreeDynamicsFunctions.computeInverseDynamicsIDynTree(robotModelURDF,jointPos',jointVel',jointAcc',gravityModulus);
         symbolcResult_list(:,i)= tau_symbolic_function;
     end
     eps_t1 = abs(iDynResult_list'-symbolcResult_list');
@@ -82,7 +82,7 @@ end
 if dynamicRegressor
      
     % Sumbolic Inverse Dyncamics function
-    symbolicIDFunction = symbolicInverseDynamics(robotModelURDF,0,location_generated_functions);
+    symbolicIDFunction = urdf2casadi.Dynamics.symbolicInverseDynamics(robotModelURDF,0,location_generated_functions);
     % Gravity column vector
     g =[0;0;-gravityModulus];
     % Test with symbolic function
@@ -91,14 +91,14 @@ if dynamicRegressor
     extForce = zeros(6,nrOfJoints);
      
     % Rettrive Inertia parameters
-    smds = extractSystemModel(robotModelURDF);
+    smds = urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel(robotModelURDF);
     for i = 1:nrOfJoints
         p(:,i) = [smds.mass{i}; smds.mass{i}*smds.com{i}; smds.I{i}(1,1); smds.I{i}(1,2); smds.I{i}(1,3);...
                                smds.I{i}(2,2); smds.I{i}(2,3); smds.I{i}(3,3)]; 
     end
     inertiaParameters = reshape(p,[],1);
     % Symbolic regressor
-    Y = inverseDynamicsInertialParametersRegressor(robotModelURDF,0,location_generated_functions);
+    Y = urdf2casadi.Utils.inverseDynamicsInertialParametersRegressor(robotModelURDF,0,location_generated_functions);
 
      for i = 1:nrOfTests
         jointPos = rand(nrOfJoints,1);

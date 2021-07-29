@@ -2,6 +2,11 @@ function [jacobian,X,XForce,S,O_X_ee] = createSpatialTransformsFunction(robotURD
 %Create symbolic and c code function for the spatial transform from a
 %general link i to any link j in its subtree
 
+% Import necessary functions
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Utils.computeKinematics
+import urdf2casadi.Utils.computeJacobian
+
 % Extract the robot model
 smds = extractSystemModel(robotURDFModel);
 % Initialize variables

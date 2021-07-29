@@ -5,6 +5,13 @@ twoLink_urdf = [location_tests_folder,'/../../URDFs/twoLinks.urdf'];
 kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
 iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
 
+%% Import necessary functions 
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Dynamics.createMassAndCoriolisMatrixFunction
+import urdf2casadi.Dynamics.symbolicInverseDynamics
+import urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.createSpatialTransformsFunction
+import urdf2casadi.Utils.auxiliaryFunctions.plot_trajectories
+
 %% Input urdf file to acquire robot structure
 robotURDFModel = kuka_urdf;
 
@@ -14,7 +21,12 @@ location_generated_functions = [location_tests_folder,'/../../automaticallyGener
 
 [HFunction,HDotFunction,CFunction]= createMassAndCoriolisMatrixFunction(robotURDFModel,1,location_generated_functions);
 symbolicIDFunction = symbolicInverseDynamics(robotURDFModel,1,location_generated_functions);
-[jacobian,X,XForce,S] = createSpatialTransformsFunction(robotURDFModel,1,location_generated_functions);
+
+spatialTransformoptions.geneate_c_code = true;
+spatialTransformoptions.location_generated_fucntion = location_generated_functions;
+spatialTransformoptions.FrameVelocityRepresentation = "INERTIAL_FIXED_REPRESENTATION";
+
+[jacobian,X,XForce,S] = createSpatialTransformsFunction(robotURDFModel,spatialTransformoptions);
 %% Create trajectories for simulation
 [smds,model] = extractSystemModel(robotURDFModel);
 nrOfJoints = smds.NB;
@@ -54,17 +66,12 @@ for t = 1:nrOfSamples
     tau_ext(t,:)  = (full(jacobian(q(t,:))).'*F_ext(:,end))';
     jacobian_inTime(:,:,t) = full(jacobian(q(t,:)));
 end
-% tau = computeInverseDynamicsIDynTree(robotURDFModel,q,qd,qdd,gravityModulus);
-
-%% Simulate in MATLAB
-% simulateObserverMatlab;
 
 %% Plot results
 timesInSeconds = sampling_period*(1:nrOfSamples);
 plot_trajectories(q, timesInSeconds,'q');
 plot_trajectories(qd, timesInSeconds,'dq');
 plot_trajectories(qdd, timesInSeconds,'ddq');
-% plot_trajectories(tau, timesInSeconds,'tau');
 plot_trajectories(tau_rnea, timesInSeconds,'tau_{rnea}');
 plot_trajectories(tau_ext, timesInSeconds,'tau_{ext}');
 
@@ -76,8 +83,3 @@ qd_data = timeseries(qd);
 qdd_data = timeseries(qdd);
 tau_data = timeseries(tau_rnea);
 
-
-% N = size(dataset.timestampInSeconds,1);
-% for i = 1:N
-%     measuredJointTorques(:,i) = Kt*K_gear_coup*dataset.trqSetMotorSide(i,:)';
-% end

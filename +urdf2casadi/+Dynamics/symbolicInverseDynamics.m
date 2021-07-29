@@ -3,6 +3,13 @@ function [symbolicIDFunction] = symbolicInverseDynamics(file,geneate_c_code,loca
 %Based on RNEA inverse dynamics code by Roy Featherstone, 2015
 %http://royfeatherstone.org/spatial/v2/index.html
 
+% Import functions 
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Utils.Spatial.jcalc
+import urdf2casadi.Utils.Spatial.crf
+import urdf2casadi.Utils.Spatial.crm
+import urdf2casadi.Utils.Spatial.apply_external_forces
+
 %Load urdf and convert to SMDS format
 smds = extractSystemModel(file);
 %Initialize variables
@@ -16,7 +23,6 @@ tau = SX.sym('tau', [smds.NB,1]);
 
 %Gravity
 a_grav = [0;0;0;g(1);g(2);g(3)];
-
 
 %RNEA
 %Forward recursion
@@ -40,14 +46,12 @@ end
 % f_ext:one (6,1) vector per each link excluding the base(considered fixed for now) 
 f = apply_external_forces( smds.parent, Xup, f, f_ext );
 
-
 for i = smds.NB:-1:1
   tau(i,1) = S{i}' * f{i};
   if smds.parent(i) ~= 0
     f{smds.parent(i)} = f{smds.parent(i)} + Xup{i}'*f{i};
   end
 end
- 
 
 % Define the symbolic function and set its input and output in poper order
 % and with proper names
@@ -60,9 +64,7 @@ end
 inputVarNames = {'q','qd','qdd','g','F_ext'};
 outputVarName = 'jointToques';
 symbolicIDFunction=Function('rnea',{q,qd,qdd,g,F_ext},{tau},inputVarNames,outputVarName);
-% inputVarNames = {'q','qd','qdd','g'};
-% outputVarName = 'jointToques';
-% symbolicIDFunction=Function('rnea',[{q,qd,qdd,g}],{tau},inputVarNames,outputVarName);
+
 %% Code generation option
 if geneate_c_code
     current_folder = pwd;

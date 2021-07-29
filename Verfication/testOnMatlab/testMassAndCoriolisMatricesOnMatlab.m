@@ -8,7 +8,18 @@ kuka_kr210 = [location_tests_folder,'/../../URDFs/kuka_kr210.urdf'];
 iCub_r_leg = [location_tests_folder,'/../../URDFs/iCub_r_leg.urdf'];
 
 %% Input urdf file to acquire robot structure
-robotURDFModel=iCub_r_leg;
+robotURDFModel=kuka_kr210;
+
+%% Import necesary functions
+import urdf2casadi.Utils.modelExtractionFunctions.extractSystemModel
+import urdf2casadi.Dynamics.symbolicInverseDynamics
+import urdf2casadi.Utils.iDynTreeDynamicsFunctions.computeMassMatrixIDynTree
+import urdf2casadi.Utils.iDynTreeDynamicsFunctions.computeGravityTorqueIDynTree
+import urdf2casadi.Utils.iDynTreeDynamicsFunctions.computeGeneralizedBiasForceIDynTree
+import urdf2casadi.Dynamics.HandC
+import urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.computeSymbolicCoriolismatrix
+import urdf2casadi.Dynamics.auxiliarySymbolicDynamicsFunctions.computeGravityTorque
+import urdf2casadi.Utils.auxiliaryFunctions.cell2mat_casadi
 
 %% Constants
 gravityModulus = 9.80665;

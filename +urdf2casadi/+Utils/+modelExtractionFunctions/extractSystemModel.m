@@ -1,6 +1,8 @@
 function [smds,model] = extractSystemModel(file)
 %Converts URDF file to System Model Data Structure
 %as specified in http://royfeatherstone.org/spatial/v2/sysmodel.html
+% Import all auxiliary functions
+import urdf2casadi.Utils.modelExtractionFunctions.*
 %Load URDF
 model = xml2struct(file);
 % model = importrobot(file);

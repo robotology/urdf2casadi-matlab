@@ -6,7 +6,7 @@ jointAccMatlab = forwardDynamics(modelRobotMatlab,q,qd,tau);
 %% IDynTree
 
 %% Symbolic
-symbolicDynamicFunction = symbolicForwardDynamics(robotModelURDF,0);
+symbolicDynamicFunction = urdf2casadi.Dynamics.symbolicForwardDynamics(robotModelURDF,0);
 g =[0;0;-gravityModulus]; % Gravity column vector
 % Test with symbolic function
 jointAccSymbolic = symbolicDynamicFunction(q, qd, g,tau);
