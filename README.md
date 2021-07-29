@@ -20,6 +20,7 @@ Some usefull turorial can be found at https://github.com/robotology/idyntree#tut
 Add to the [MATLAB path](https://mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html) the repository and all its subfolders by launching `setPath.m`, make sure to insert the correct path to CasADi.Get the [URDF](http://wiki.ros.org/urdf) of your robot. Then pick one of the functions to create and test the model against IDynTree 
 in the Verification/ subfolder. Each test* script should be launched from the folder it is contained in.
 
+The code is structured as a MATLAB package. See the [MATLAB documentation](https://it.mathworks.com/help/matlab/matlab_oop/scoping-classes-with-packages.html) on how to reference the package members from within and outside the package.
 ## Available algorithms
 The algorithms generate both symbolic functions and their C code version (that is compiled as a *.mex file):
 * [Inverse Dynamics](Dynamics/symbolicInverseDynamics.m);
