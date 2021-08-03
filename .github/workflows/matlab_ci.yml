@@ -21,8 +21,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-        CONDA_ENV_NAME: urdf2casadi
-    
+        CONDA_ENV_NAME: urdf2casadi_conda_env
+        MATLAB_VERSION: R2020b
     defaults:
       run:
         shell: bash -l {0}
@@ -55,13 +55,18 @@ jobs:
           echo "URDF2CASADI_TEST_FOLDER=${GITHUB_WORKSPACE}/tests" >> $GITHUB_ENV
           echo "CONDA_ENV_LOCATION=${GITHUB_WORKSPACE}/${{env.CONDA_ENV_NAME}}" >> $GITHUB_ENV
           echo "IDYNTREE_AND_CASADI_MATLAB_BINDINGS_PATH=${GITHUB_WORKSPACE}/${{env.CONDA_ENV_NAME}}/mex" >> $GITHUB_ENV
-
+          echo 'LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6' >> $GITHUB_ENV
 
       - name: Install MATLAB
-        uses: matlab-actions/setup-matlab@v0
+        uses: matlab-actions/setup-matlab@v1
         with:
-          release: R2020b
+          release: ${{env.MATLAB_VERSION }}
 
+      - name: Run MATLAB to modify libstdc++.so.6
+        uses: matlab-actions/run-command@v1
+        with:
+          command: disp(matlabroot); dir([matlabroot, '/sys/os/glnxa64/']); 
+          
       - name: Check the path variables
         if: matrix.os == 'ubuntu-latest'
         run: |
@@ -83,4 +88,4 @@ jobs:
       - name: Run MATLAB tests
         uses: matlab-actions/run-command@v1
         with:
-          command: addpath( getenv('IDYNTREE_AND_CASADI_MATLAB_BINDINGS_PATH') ); addpath(getenv('URDF2CASADI_PACKAGE_PATH')); cd(getenv('URDF2CASADI_TEST_FOLDER')); result = runtests; assertSuccess(result);
+          command: addpath( getenv('IDYNTREE_AND_CASADI_MATLAB_BINDINGS_PATH') ); addpath(getenv('URDF2CASADI_PACKAGE_PATH')); addpath( genpath(getenv('URDF2CASADI_TEST_FOLDER')) ); cd(getenv('URDF2CASADI_TEST_FOLDER')); result=runtests; assertSuccess(result);

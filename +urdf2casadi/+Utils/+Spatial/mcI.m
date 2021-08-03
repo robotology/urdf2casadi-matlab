@@ -26,6 +26,9 @@ end
 
 function  rbi = mcI_to_rbi( m, c, I )
 
+% Import skew function 
+import urdf2casadi.Utils.Spatial.skew
+
 if length(c) == 3			% spatial
 
   C = skew(c);
@@ -40,6 +43,9 @@ end
 
 
 function  [m,c,I] = rbi_to_mcI( rbi )
+
+% Import skew function 
+import urdf2casadi.Utils.Spatial.skew
 
 if all(size(rbi)==[6 6])		% spatial
 
