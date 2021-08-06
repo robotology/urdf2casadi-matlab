@@ -1,6 +1,10 @@
 function R = fromRotationAxisToRotationMatrix(a,q)
 %Compute rotation matrix from rotation axis using Rodriguez formula 
 % a,q ---> R
+
+% Import skew function 
+import urdf2casadi.Utils.Spatial.skew
+
 if all(size(a)==[1,3])
     a = a.';
 end

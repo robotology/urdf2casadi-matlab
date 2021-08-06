@@ -15,7 +15,7 @@ regressor_opts.returnTransposedRegressor = true;
 disp('Computing the regressor...')
 tic
 % Compute the symbolic regressor 
-Y_transposed = computeSymbolicRegressor(q(1,:).', qd(1,:).', qdd(1,:).', g, smds,regressor_opts);
+Y_transposed = urdf2casadi.Identification.auxiliarySymbolicDynamicsFunctions.computeSymbolicRegressor(q(1,:).', qd(1,:).', qdd(1,:).', g, smds,regressor_opts);
 % Stack of regressors, one per trajectory point
 stackOfRegressorsTransposed = Y_transposed.map(nrOfTrajectoryPoints);
 toc
