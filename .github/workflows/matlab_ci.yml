@@ -4,7 +4,6 @@ on:
   push:
     branches:
             - master
-            - matlab-github-ci
   pull_request:
     branches:
             - master
