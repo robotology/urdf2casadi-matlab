@@ -5,6 +5,7 @@ function [type,axis] = setJointType(model, jointIndex)
 % Set default value for the type and axis
 type = '';
 axis = [0 0 0];
+zeroTol = 1e-5;
 if (strcmp(model.robot.joint{1,jointIndex}.Attributes.type,'fixed'))   
     if  isfield(model.robot.joint{1,jointIndex}, 'axis')
         axis = str2num(model.robot.joint{1,jointIndex}.axis.Attributes.xyz);
@@ -23,13 +24,15 @@ if (strcmp(model.robot.joint{1,jointIndex}.Attributes.type,'continuous') || strc
         % Default axis value according to http://wiki.ros.org/urdf/XML/joint
         axis = [1 0 0];
     end
-    if ((axis(1)~=0) && (axis(2)==0) && (axis(3)==0))
+    % Check the axis vector components. Take into account possible numerical errors in the URDFs with non
+    % perfectly null `axis` vector components using a small threshold.
+    if (abs(axis(1))>= 1-zeroTol && abs(axis(2))<=zeroTol && abs(axis(3))<=zeroTol)
         type = 'Rx';
     end
-    if ((axis(1)==0) && (axis(2)~=0) && (axis(3)==0))
+    if (abs(axis(1))<=zeroTol && abs(axis(2))>= 1-zeroTol && abs(axis(3))<=zeroTol)
         type = 'Ry';
     end
-    if ((axis(1)==0) && (axis(2)==0) && (axis(3)~=0))
+    if (abs(axis(1))<=zeroTol && abs(axis(2))<=zeroTol && abs(axis(3))>= 1-zeroTol)
         type = 'Rz';
     end
 end
@@ -41,13 +44,15 @@ if (strcmp(model.robot.joint{1,jointIndex}.Attributes.type,'prismatic'))
         % Default axis value according to http://wiki.ros.org/urdf/XML/joint
         axis = [1 0 0];
     end
-    if ((axis(1)~=0) && (axis(2)==0) && (axis(3)==0))
+    % Check the axis vector components. Take into account possible numerical errors in the URDFs with non
+    % perfectly null `axis` vector components using a small threshold.
+    if (abs(axis(1))>= 1-zeroTol && abs(axis(2))<=zeroTol && abs(axis(3))<=zeroTol)
         type = 'Px';
     end
-    if ((axis(1)==0) && (axis(2)~=0) && (axis(3)==0))
+    if (abs(axis(1))<=zeroTol && abs(axis(2))>= 1-zeroTol && abs(axis(3))<=zeroTol)
         type = 'Py';
     end
-    if ((axis(1)==0) && (axis(2)==0) && (axis(3)~=0))
+    if (abs(axis(1))<=zeroTol && abs(axis(2))<=zeroTol && abs(axis(3))>= 1-zeroTol)
         type = 'Pz';
     end
 end
