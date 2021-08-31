@@ -16,6 +16,9 @@ Its documentation can be found at https://robotology.github.io/idyntree/master/.
 Make sure to compile the [bindings to MATLAB](https://github.com/robotology/idyntree#bindings).
 Some usefull turorial can be found at https://github.com/robotology/idyntree#tutorials .
 
+## URDF specifications
+The URDF specifications and its mathematical description that has been used in this repository can be found [here](https://github.com/robotology/blender-robotics-utils/issues/3#issuecomment-906262419). Only joints with the [`axis`](http://wiki.ros.org/urdf/XML/joint) aligned with one of the three directions of the joint frame are supported.
+
 ## Usage 
 Add to the [MATLAB path](https://mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html) the repository and all its subfolders by launching `setPath.m`, make sure to insert the correct path to CasADi.Get the [URDF](http://wiki.ros.org/urdf) of your robot. Then pick one of the functions to create and test the model against IDynTree 
 in the Verification/ subfolder. Each test* script should be launched from the folder it is contained in.
