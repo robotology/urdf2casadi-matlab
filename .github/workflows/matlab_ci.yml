@@ -17,11 +17,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
+        matlab_version: [R2020a, R2020b, R2021a, latest]
     runs-on: ${{ matrix.os }}
 
     env:
         CONDA_ENV_NAME: urdf2casadi_conda_env
-        MATLAB_VERSION: R2020b
     defaults:
       run:
         shell: bash -l {0}
@@ -59,7 +59,7 @@ jobs:
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v1
         with:
-          release: ${{env.MATLAB_VERSION }}
+          release: ${{ matrix.matlab_version }}
 
       - name: Run MATLAB to modify libstdc++.so.6
         uses: matlab-actions/run-command@v1
